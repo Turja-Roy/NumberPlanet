@@ -33,7 +33,7 @@ public class Droplet extends JLabel {
         hasSplashed = false;
 
         // Set the icon for the droplet
-        icon = new ImageIcon("res/fireball.png");
+        icon = new ImageIcon("res/droplet.png");
         icon = new ImageIcon(icon.getImage().getScaledInstance(DROPLET_WIDTH, DROPLET_HEIGHT, java.awt.Image.SCALE_SMOOTH)); // resize icon
 
         // Set the icon for the splash
@@ -66,7 +66,7 @@ public class Droplet extends JLabel {
         else {
             // Set the composite for opacity
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
-            // Draw the fireball with opacity
+            // Draw the droplet with opacity
             g2d.drawImage(icon.getImage(), (int)x, (int)y, DROPLET_WIDTH, DROPLET_HEIGHT, null);
 
             // Reset composite for text
@@ -92,7 +92,7 @@ public class Droplet extends JLabel {
     public boolean hasSplashed () { return hasSplashed; }
     public int getValue () { return value; }
     public ImageIcon getNormalIcon () {
-        icon = new ImageIcon("res/fireball.png");
+        icon = new ImageIcon("res/droplet.png");
         icon = new ImageIcon(icon.getImage().getScaledInstance(DROPLET_WIDTH, DROPLET_HEIGHT, java.awt.Image.SCALE_SMOOTH)); // resize icon
         return icon;
     }

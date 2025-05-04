@@ -21,9 +21,11 @@ import actions.ds.stack.Stack;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.OverlayLayout;
 
 import main.GameFrame;
 import main.Main;
+import panels.TransitionPanel;
 import ui.Bucket;
 import ui.Droplet;
 import utilz.Constants.DropletConstants;
@@ -35,7 +37,6 @@ public class Round1Panel extends JPanel implements ActionListener {
     private GameFrame gameFrame;
     private Timer timer;
 
-    private Arsenal arsenal;
     private Stack rainDrops;
     private ArrayList<Droplet> activeDroplets;
     private int lastDropHeight;
@@ -50,8 +51,7 @@ public class Round1Panel extends JPanel implements ActionListener {
 
         bgImage = new ImageIcon("res/bgImage.jpg").getImage();
 
-        arsenal = new Arsenal();
-        rainDrops = arsenal.getRainDrops();
+        rainDrops = Arsenal.getRainDrops();
         activeDroplets = new ArrayList<>();
         lastDropHeight = 0;
         splashCounter = 0;
@@ -74,10 +74,35 @@ public class Round1Panel extends JPanel implements ActionListener {
         timer.start();
     }
 
+    private void transitionToRound2 () {
+        // Create transition panel
+        TransitionPanel transitionPanel = new TransitionPanel("Round 1 Complete. Prepare for the Attack!!!");
+        this.setLayout(new OverlayLayout(this)); // Change layout temporarily
+        this.add(transitionPanel);
+        transitionPanel.setAlignmentX(0.5f);
+        transitionPanel.setAlignmentY(0.5f);
+        transitionPanel.revalidate();
+        repaint();
+
+        // Delay timer
+        Timer delayTimer = new Timer(5000, evt -> {
+            this.remove(transitionPanel);
+            this.setLayout(null); // Restore original layout
+            GamePanel parent = (GamePanel)getParent();
+            parent.switchToRound2Panel();
+        ((Timer)evt.getSource()).stop();
+        });
+        delayTimer.setRepeats(false);
+        delayTimer.start();
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (rainDrops.isEmpty() && activeDroplets.isEmpty()) {
-            arsenal.StackToBST();
+            timer.stop();
+            Arsenal.StackToBST();
+            transitionToRound2();
+
             return;
         }
 
@@ -94,16 +119,16 @@ public class Round1Panel extends JPanel implements ActionListener {
             // Check for collection or out of bounds
             if (!droplet.hasSplashed() && bucket.getBounds().intersects(droplet.getBounds())) {
                 bucket.setShowGlow(true);
-                arsenal.collectDroplet(droplet);
+                Arsenal.collectDroplet(droplet);
                 activeDroplets.remove(droplet);
-                ((GamePanel)getParent()).addCollectedDroplet(droplet.getValue(), arsenal.getCollectedDroplets().size());
+                ((GamePanel)getParent()).addCollectedDroplet(droplet.getValue());
             }
             else if (droplet.hasSplashed()) {
                 splashedDroplet = droplet;
             }
         }
         } catch (ConcurrentModificationException ex) {
-            System.out.println("Concurrent modification exception caught: " + ex.getMessage());
+            // System.out.println("Concurrent modification exception caught: " + ex.getMessage());
         }
 
         if (splashCounter > 200) {
@@ -118,19 +143,13 @@ public class Round1Panel extends JPanel implements ActionListener {
 
     @Override
     public void paint (Graphics g) {
-        super.paint(g);
-
         g.drawImage(bgImage, 0, 0, GameConstants.GAMEWIDTH, GameConstants.GAMEHEIGHT, null);
 
         for (Droplet droplet : activeDroplets) {
             droplet.draw(g);
         }
-
         bucket.draw(g);
-    }
 
-    // Getters
-    public Arsenal getArsenal() {
-        return arsenal;
+        super.paintChildren(g);
     }
 }

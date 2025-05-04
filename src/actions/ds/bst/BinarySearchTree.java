@@ -1,12 +1,23 @@
 package actions.ds.bst;
 
 public class BinarySearchTree {
-    public Node root;
+
+    private Node root;
+
     public BinarySearchTree() {
         root = null;
     }
+
+    // add using recursion
     public void add(int value) {
         Node newNode = new Node(value);
+
+        Node find = search(value);
+        if (find != null) {
+            find.setCount(find.getCount() + 1);
+            return;
+        }
+
         if (root == null) {
             root = newNode;
         } else {
@@ -30,6 +41,8 @@ public class BinarySearchTree {
             }
         }
     }
+
+    // search using recursion
     public Node search(int value) {
         return searchHelper(root, value);
     }
@@ -43,11 +56,15 @@ public class BinarySearchTree {
             return searchHelper(current.getRight(), value);
         }
     }
+
     // remove using search and findMin
     public void remove(int value) {
         Node nodeToRemove = search(value);
         if (nodeToRemove != null) {
-            removeNode(nodeToRemove);
+            if (nodeToRemove.getCount() > 1)
+                nodeToRemove.setCount(nodeToRemove.getCount() - 1);
+            else
+                removeNode(nodeToRemove);
         }
     }
     private void removeNode(Node nodeToRemove) {
@@ -95,6 +112,7 @@ public class BinarySearchTree {
         }
         return current;
     }
+
     // Inorder traversal
     public void traverse () {
         inOrderTraversal(root);
@@ -102,7 +120,8 @@ public class BinarySearchTree {
     public void inOrderTraversal (Node node) {
         if (node != null) {
             inOrderTraversal(node.getLeft());
-            System.out.print(node.getValue() + " ");
+            for (int i=0 ; i<node.getCount() ; i++)
+                System.out.print(node.getValue() + " ");
             inOrderTraversal(node.getRight());
         }
     }
