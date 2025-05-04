@@ -21,16 +21,16 @@ public class Droplet extends JLabel {
     private double x, y, yvel;
     private int value;
 
-    private boolean hasDropped;
+    private boolean hasSplashed;
 
     ImageIcon icon, splashIcon;
 
     public Droplet (int value) {
-        x = (double) Math.random() * GameConstants.GAMEWIDTH; // Random x position
+        x = (double) Math.random() * (GameConstants.GAMEWIDTH - 50); // Random x position
         y = 0f;
         yvel = DROPLET_SPEED;
         this.value = value;
-        hasDropped = false;
+        hasSplashed = false;
 
         // Set the icon for the droplet
         icon = new ImageIcon("res/fireball.png");
@@ -48,7 +48,7 @@ public class Droplet extends JLabel {
     public void fall () {
         if (y >= GameConstants.GAMEHEIGHT - BucketConstants.BUCKET_HEIGHT - 5) {
             icon = splashIcon;
-            hasDropped = true; // Mark as dropped
+            hasSplashed = true; // Mark as dropped
         }
         else {
             y += yvel; // Move down
@@ -59,7 +59,7 @@ public class Droplet extends JLabel {
     public void draw (Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
 
-        if (hasDropped) {
+        if (hasSplashed) {
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
             g2d.drawImage(icon.getImage(), (int)x, (int)y, DROPLET_WIDTH, DROPLET_HEIGHT, null);
         }
@@ -89,7 +89,13 @@ public class Droplet extends JLabel {
     // Getters
     public double getXpos () { return (double) x; }
     public double getYpos () { return (double) y; }
-    public boolean hasDropped () { return hasDropped; }
+    public boolean hasSplashed () { return hasSplashed; }
+    public int getValue () { return value; }
+    public ImageIcon getNormalIcon () {
+        icon = new ImageIcon("res/fireball.png");
+        icon = new ImageIcon(icon.getImage().getScaledInstance(DROPLET_WIDTH, DROPLET_HEIGHT, java.awt.Image.SCALE_SMOOTH)); // resize icon
+        return icon;
+    }
     public Rectangle getBounds() {
         return new Rectangle((int)x, (int)y, DROPLET_WIDTH, DROPLET_HEIGHT);
     }
