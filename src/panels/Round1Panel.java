@@ -35,22 +35,10 @@ public class Round1Panel extends JPanel implements ActionListener {
     public Round1Panel (GameFrame gameFrame) {
         this.gameFrame = gameFrame;
 
-        bucket = new Bucket();
         bgImage = new ImageIcon("res/bgImage.jpg").getImage();
 
+        bucket = new Bucket();
         droplet = new Droplet(55);
-        // timer = new Timer(5, new ActionListener() {
-        //     @Override
-        //     public void actionPerformed(ActionEvent e) {
-        //         droplet.fall();
-        //
-        //         if (!droplet.hasDropped() && 
-        //             bucket.getBounds().intersects(droplet.getBounds())) {
-        //             bucket.setShowGlow(true);
-        //         }
-        //         repaint();
-        //     }
-        // });
 
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
