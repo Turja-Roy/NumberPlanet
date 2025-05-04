@@ -2,7 +2,7 @@ package actions;
 
 import java.util.ArrayList;
 
-// import actions.ds.bst.BinarySearchTree;
+import actions.ds.bst.BinarySearchTree;
 import actions.ds.stack.Stack;
 import ui.Droplet;
 
@@ -10,11 +10,12 @@ public class Arsenal {
     private Stack rainDrops;
     private Stack dropletStack;
 
-    // private BinarySearchTree dropletTree;
+    private BinarySearchTree dropletTree;
 
     public Arsenal() {
         rainDrops = new Stack();
         dropletStack = new Stack();
+        dropletTree = new BinarySearchTree();
 
         // Populating the rainDrops stack with random droplets
         for (int i=0 ; i<100 ; i++) {
@@ -28,16 +29,12 @@ public class Arsenal {
             dropletStack.push(droplet);
         }
     }
-    // public void StackToBST () {
-    //     // Convert the stack dropletStack to a binary search tree (BST)
-    //     // This is a placeholder for the actual implementation
-    //     dropletTree = new BinarySearchTree();
-    //
-    //     while (!dropletStack.isEmpty()) {
-    //         Droplet droplet = dropletStack.pop();
-    //         dropletTree.add(droplet.getValue());
-    //     }
-    // }
+    public void StackToBST () {
+        while (!dropletStack.isEmpty()) {
+            dropletTree.add(dropletStack.pop().getValue());
+        }
+        // dropletTree.traverse();
+    }
 
     // Getters
     public Stack getRainDrops() {

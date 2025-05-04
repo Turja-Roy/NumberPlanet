@@ -77,7 +77,7 @@ public class Round1Panel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (rainDrops.isEmpty() && activeDroplets.isEmpty()) {
-            // BST Operation
+            arsenal.StackToBST();
             return;
         }
 

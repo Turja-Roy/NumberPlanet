@@ -96,13 +96,14 @@ public class BinarySearchTree {
         return current;
     }
     // Inorder traversal
-    public void traversal() {
-        traversalHelper(root);
+    public void traverse () {
+        inOrderTraversal(root);
     }
-    private void traversalHelper(Node current) {
-        if (current != null) {
-            traversalHelper(current.getLeft());
-            traversalHelper(current.getRight());
+    public void inOrderTraversal (Node node) {
+        if (node != null) {
+            inOrderTraversal(node.getLeft());
+            System.out.print(node.getValue() + " ");
+            inOrderTraversal(node.getRight());
         }
     }
 }
