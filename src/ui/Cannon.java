@@ -27,7 +27,7 @@ public class Cannon extends JLabel {
         glowCounter = 0;
 
         // Set the icon for the bucket
-        icon = new ImageIcon("res/bucket.png");
+        icon = new ImageIcon("res/cannon1.png");
         icon = new ImageIcon(icon.getImage().getScaledInstance(CANNON_WIDTH, CANNON_HEIGHT, java.awt.Image.SCALE_SMOOTH)); // resize icon
 
         setBounds((int) x, (int) y, CANNON_WIDTH, CANNON_HEIGHT); // Set the bounds of the bucket

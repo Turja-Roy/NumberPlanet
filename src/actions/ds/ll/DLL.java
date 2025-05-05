@@ -1,16 +1,18 @@
 package actions.ds.ll;
 
-public class LinkedList {
-    Node head;
-    Node tail;
-    int size;
-    public LinkedList() {
+public class DLL<T extends Comparable<T>> {
+
+    private Node<T> head;
+    private Node<T> tail;
+    private int size;
+
+    public DLL() {
         head = null;
         tail = null;
         size = 0;
     }
-    public void add(int value) {
-        Node newNode = new Node(value);
+    public void add(T data) {
+        Node<T> newNode = new Node<>(data);
         if (head == null) {
             head = newNode;
             tail = newNode;
@@ -21,18 +23,18 @@ public class LinkedList {
         }
         size++;
     }
-    public Node find(int value) {
-        Node current = head;
+    public Node<T> find(T data) {
+        Node<T> current = head;
         while (current != null) {
-            if (current.getValue() == value) {
+            if (current.getData() == data) {
                 return current;
             }
             current = current.getNext();
         }
         return null; // Not found
     }
-    public void remove(int value) {
-        Node current = find(value);
+    public void remove(T data) {
+        Node<T> current = find(data);
         if (current != null) {
             if (current.getPrev() != null) {
                 current.getPrev().setNext(current.getNext());
@@ -48,14 +50,16 @@ public class LinkedList {
         }
     }
     public void printList() {
-        Node current = head;
+        Node<T> current = head;
         while (current != null) {
-            System.out.print(current.getValue() + " ");
+            System.out.print(current.getData() + " ");
             current = current.getNext();
         }
         System.out.println();
     }
-    public int getSize() {
-        return size;
-    }
+
+    // Getters
+    public Node<T> getHead() { return head; }
+    public Node<T> getTail() { return tail; }
+    public int getSize() { return size; }
 }

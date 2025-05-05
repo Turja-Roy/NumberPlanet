@@ -1,6 +1,8 @@
 package actions.ds.bst;
 
-import java.util.ArrayList;
+import actions.ds.ll.DLL;
+import ui.Droplet;
+import ui.Fireball;
 
 public class BinarySearchTree<T extends Comparable<T>> {
 
@@ -136,11 +138,11 @@ public class BinarySearchTree<T extends Comparable<T>> {
             inOrderTraversal(node.getRight());
         }
     }
-    public void traverse (Node<T> node, ArrayList<T> dropletList) {
+    public void traverse (Node<Droplet> node, DLL<Fireball> dropletList) {
         if (node != null) {
             traverse(node.getLeft(), dropletList);
             for (int i=0 ; i<node.getCount() ; i++)
-                dropletList.add(node.getData());
+                dropletList.add(new Fireball(node.getData().getValue(), false));
             traverse(node.getRight(), dropletList);
         }
     }

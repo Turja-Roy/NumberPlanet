@@ -10,7 +10,9 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
 import actions.Arsenal;
+import actions.ds.Pair;
 import actions.ds.bst.BinarySearchTree;
+import actions.ds.ll.DLL;
 import actions.ds.stack.Stack;
 
 import javax.swing.ImageIcon;
@@ -18,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import main.GameFrame;
+import ui.Droplet;
 import ui.Fireball;
 import ui.Cannon;
 import utilz.Constants.CannonConstants;
@@ -30,12 +33,16 @@ public class Round2Panel extends JPanel implements ActionListener {
     private GameFrame gameFrame;
     private Timer timer;
     
-    private Stack<Fireball> enemyFireShots;
-    private BinarySearchTree playerDropletsBST;
-    private int[] playerDroplets;
-    private ArrayList<Fireball> activeShots;
+    private Stack<Fireball> enemyFireShots; // Enemy's arsenal
+    private ArrayList<Fireball> activeEnemyShots; // Active enemy shots
+
+    private BinarySearchTree<Droplet> playerDropletsBST; // Player's arsenal
+    private DLL<Fireball> playerDroplets; // Player's arsenal
+    private ArrayList<Pair> activePlayerShots; // Active player shots
+
     private int lastShotHeight;
     private int burstCounter;
+    private int splashCounter;
 
     private Image bgImage;
 
@@ -48,9 +55,15 @@ public class Round2Panel extends JPanel implements ActionListener {
 
         enemyFireShots = Arsenal.getEnemyFireShots();
         playerDroplets = Arsenal.getPlayerDroplets();
-        activeShots = new ArrayList<>();
+
+        activeEnemyShots = new ArrayList<>();
+        activePlayerShots = new ArrayList<>();
+
         lastShotHeight = 0;
         burstCounter = 0;
+        splashCounter = 0;
+
+        cannon = new Cannon();
 
         this.setPreferredSize(new Dimension(GameConstants.GAMEWIDTH, GameConstants.GAMEHEIGHT));
         this.setLayout(null);
@@ -64,74 +77,65 @@ public class Round2Panel extends JPanel implements ActionListener {
     public void actionPerformed (ActionEvent e) {
         updateEnemyFireballs();
         updatePlayerDroplets();
-        checkCollisions();
         repaint();
-    }
-
-    @Override
-    public void paint (Graphics g) {
-        super.paint(g);
-
-        g.drawImage(bgImage, 0, 0, GameConstants.GAMEWIDTH, GameConstants.GAMEHEIGHT, null);
-
-        for (Fireball fireball : activeShots) {
-            fireball.draw(g);
-        }
-
-        cannon.draw(g);
     }
 
     // Action methods
     private void updateEnemyFireballs () {
-        // Move all active enemy shots downward
-        for (Fireball fireball : activeShots) {
-            fireball.fall();
+        if (!enemyFireShots.isEmpty() && lastShotHeight >= GameConstants.GAMEHEIGHT / 3) {
+            activeEnemyShots.add(enemyFireShots.pop());
+            lastShotHeight = 0;
         }
 
-        // Spawn new fireballs periodically
-        if (lastShotHeight >= GameConstants.GAMEHEIGHT / 3) {
-            if (!enemyFireShots.isEmpty()) {
-                activeShots.add(enemyFireShots.pop());
-                lastShotHeight = 0;
+        Fireball burstFireball = null;
+        Fireball splashFireball = null;
+        try{
+        for (Fireball fireball : activeEnemyShots) {
+            fireball.fall();
+
+            if (fireball.hasBurst()) {
+                burstFireball = fireball;
+                Arsenal.enemyScoreIncrease(fireball.getValue());
+            }
+            else if (fireball.hasSplashed()) {
+                splashFireball = fireball;
             }
         }
+        } catch (ConcurrentModificationException e) { }
+
+        if (burstCounter > 200) {
+            activeEnemyShots.remove(burstFireball);
+            burstCounter = 0;
+        }
+        if (splashCounter > 200) {
+            activeEnemyShots.remove(splashFireball);
+            splashCounter = 0;
+        }
+
         lastShotHeight += FireballConstants.FIREBALL_SPEED;
     }
     private void updatePlayerDroplets () {
-        // Move all player shots upward
-        Iterator<Fireball> iter = playerDroplets.iterator();
-        while (iter.hasNext()) {
-            Fireball droplet = iter.next();
-            droplet.shoot();
-            if (droplet.getYpos() < 0) { // Remove when off-screen
-                iter.remove();
-            }
-        }
-    }
-    private void checkCollisions () {
-        // Check player shots against enemy shots
-        for (Fireball playerShot : new ArrayList<>(playerFireballs)) {
-            for (Fireball enemyShot : new ArrayList<>(activeShots)) {
-                if (playerShot.intersects(enemyShot)) {
-                    // Show splash effect
-                    enemyShot.splash((int)enemyShot.getXpos(), (int)enemyShot.getYpos());
+        Iterator<Pair> it = activePlayerShots.iterator();
+        while (it.hasNext()) {
+            Pair pair = it.next();
+            pair.getDroplet().shoot();
 
-                    // Remove both projectiles
-                    playerFireballs.remove(playerShot);
-                    activeShots.remove(enemyShot);
+            if (pair.getDroplet().intersect(pair.getTarget())) {
+                int ind = activeEnemyShots.indexOf(pair.getTarget());
+                if (pair.getDroplet().getValue() >= pair.getTarget().getValue()) {
+                    if (ind != -1) activeEnemyShots.get(ind).setSplash(true);
 
-                    // Add score
-                    Arsenal.playerScoreIncrease(10);
-                    break;
+                    Arsenal.playerScoreIncrease( pair.getDroplet().getValue() - pair.getTarget().getValue() );
+                    it.remove();
                 }
-            }
-        }
+                else {
+                    if (ind != -1) {
+                        activeEnemyShots.get(ind).setBurst(true);
+                        activeEnemyShots.get(ind).setValue( activeEnemyShots.get(ind).getValue() - pair.getDroplet().getValue() );
+                    }
 
-        // Check for enemy shots reaching bottom
-        for (Fireball enemyShot : new ArrayList<>(activeShots)) {
-            if (enemyShot.hasBurst()) {
-                activeShots.remove(enemyShot);
-                Arsenal.enemyScoreIncrease(5);
+                    it.remove();
+                }
             }
         }
     }
@@ -141,7 +145,7 @@ public class Round2Panel extends JPanel implements ActionListener {
         Fireball closest = null;
         int minDiff = Integer.MAX_VALUE;
         
-        for (Fireball fb : activeShots) { // Using your existing activeShots list
+        for (Fireball fb : activeEnemyShots) { // Using your existing activeShots list
             int diff = Math.abs(fb.getValue() - buttonValue);
             
             if (fb.getValue() < buttonValue) {
@@ -158,21 +162,40 @@ public class Round2Panel extends JPanel implements ActionListener {
         
         return largestSmaller != null ? largestSmaller : closest;
     }
-    private void positionCannon(Fireball target) {
-        if (target != null) {
-            cannon.setX(target.getXpos() - (CannonConstants.CANNON_WIDTH - FireballConstants.FIREBALL_WIDTH)/2);
-        }
-    }
-    private void shootFireball(int value) {
-        Fireball shot = new Fireball(value, "shoot");
-        shot.setX(cannon.getXpos() + (CannonConstants.CANNON_WIDTH - FireballConstants.FIREBALL_WIDTH)/2);
-        shot.setY(GameConstants.GAMEHEIGHT - CannonConstants.CANNON_HEIGHT);
-        playerDroplets.add(shot);
-    }
+    // private void positionCannon(Fireball target) {
+    //     if (target != null) {
+    //         cannon.setX(target.getXpos() - (CannonConstants.CANNON_WIDTH - FireballConstants.FIREBALL_WIDTH)/2);
+    //     }
+    // }
+    // private void shootFireball(int value) {
+    //     Fireball shot = new Fireball(value, "shoot");
+    //     shot.setX(cannon.getXpos() + (CannonConstants.CANNON_WIDTH - FireballConstants.FIREBALL_WIDTH)/2);
+    //     shot.setY(GameConstants.GAMEHEIGHT - CannonConstants.CANNON_HEIGHT);
+    //     playerDroplets.add(shot);
+    // }
 
     public void handleButtonClick (int value) {
         // Handle button click event
         // You can add your logic here to handle the button click
         System.out.println("Button clicked!");
+    }
+
+    @Override
+    public void paint (Graphics g) {
+        super.paint(g);
+
+        g.drawImage(bgImage, 0, 0, GameConstants.GAMEWIDTH, GameConstants.GAMEHEIGHT, null);
+
+        // Draw the active enemy shots
+        for (Fireball fireball : activeEnemyShots) {
+            fireball.draw(g);
+        }
+
+        // Draw the active player shots
+        for (Pair pair : activePlayerShots) {
+            pair.getDroplet().draw(g);
+        }
+
+        cannon.draw(g);
     }
 }
