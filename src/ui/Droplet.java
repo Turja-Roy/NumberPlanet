@@ -17,7 +17,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 
-public class Droplet extends JLabel {
+public class Droplet extends JLabel implements Comparable<Droplet> {
     private double x, y, yvel;
     private int value;
 
@@ -98,5 +98,10 @@ public class Droplet extends JLabel {
     }
     public Rectangle getBounds() {
         return new Rectangle((int)x, (int)y, DROPLET_WIDTH, DROPLET_HEIGHT);
+    }
+
+    @Override
+    public int compareTo(Droplet other) {
+        return Integer.compare(this.value, other.value);
     }
 }

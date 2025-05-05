@@ -1,32 +1,33 @@
 package actions.ds.bst;
 
-public class Node {
-    private Node left;
-    private Node right;
-    private Node parent;
-    private int value;
-    private int count;
+public class Node<T extends Comparable<T>> {
 
-    public Node (int Value) {
-        this.value = Value;
+    private T data;
+    private int count;
+    private Node<T> left;
+    private Node<T> right;
+    private Node<T> parent;
+
+    public Node (T data) {
+        this.data = data;
         this.count = 1;
         left = null;
         right = null;
         parent = null;
     }
 
-    public int getValue(){ return value;}
-    public void setValue(Integer value){ this.value = value;}
+    public T getData(){ return data; }
+    public void setData(T data){ this.data = data;}
 
     public int getCount(){ return count;}
     public void setCount(int count){ this.count = count;}
     
-    public Node getLeft(){ return left;}
-    public void setLeft(Node left){ this.left = left;}
+    public Node<T> getLeft(){ return left;}
+    public void setLeft(Node<T> left){ this.left = left;}
     
-    public Node getRight(){ return right;}
-    public void setRight(Node right){ this.right = right;}
+    public Node<T> getRight(){ return right;}
+    public void setRight(Node<T> right){ this.right = right;}
     
-    public Node getParent(){ return parent;}
-    public void setParent(Node parent){ this.parent = parent;}
+    public Node<T> getParent(){ return parent;}
+    public void setParent(Node<T> parent){ this.parent = parent;}
 }

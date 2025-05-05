@@ -1,25 +1,23 @@
 package actions.ds.stack;
 
-import ui.Droplet;
+public class Node<T> {
+    private T data;
+    private Node<T> next;
 
-public class Node {
-    private Droplet data;
-    private Node next;
-
-    public Node (Droplet data) {
+    public Node (T data) {
         this.data = data;
         this.next = null;
     }
 
-    public Droplet getData () {
+    public T getData () {
         return data;
     }
 
-    public Node getNext () {
+    public Node<T> getNext () {
         return next;
     }
 
-    public void setNext (Node next) {
+    public void setNext (Node<T> next) {
         this.next = next;
     }
 }

@@ -2,9 +2,9 @@ package actions.ds.bst;
 
 import java.util.ArrayList;
 
-public class BinarySearchTree {
+public class BinarySearchTree<T extends Comparable<T>> {
 
-    private Node root;
+    private Node<T> root;
     private int sizeExcludingDups; // This size excludes duplicate elements
     private int sizeIncludingDups; // This size includes duplicate elements
 
@@ -15,8 +15,8 @@ public class BinarySearchTree {
     }
 
     // add using recursion
-    public void add(int value) {
-        Node newNode = new Node(value);
+    public void add(T data) {
+        Node<T> newNode = new Node<>(data);
 
         if (root == null) {
             root = newNode;
@@ -25,8 +25,10 @@ public class BinarySearchTree {
         }
         sizeIncludingDups++;
     }
-    private void addHelper(Node current, Node newNode) {
-        if (newNode.getValue() < current.getValue()) {
+    private void addHelper(Node<T> current, Node<T> newNode) {
+        int compare = newNode.getData().compareTo(current.getData());
+
+        if (compare < 0) {
             if (current.getLeft() == null) {
                 current.setLeft(newNode);
                 newNode.setParent(current);
@@ -34,7 +36,7 @@ public class BinarySearchTree {
                 addHelper(current.getLeft(), newNode);
             }
             sizeExcludingDups++;
-        } else if (newNode.getValue() > current.getValue()) {
+        } else if (compare > 0) {
             if (current.getRight() == null) {
                 current.setRight(newNode);
                 newNode.setParent(current);
@@ -48,23 +50,22 @@ public class BinarySearchTree {
     }
 
     // search using recursion
-    public Node search(int value) {
-        return searchHelper(root, value);
+    public Node<T> search(T data) { return searchHelper(root, data);
     }
-    private Node searchHelper(Node current, int value) {
-        if (current == null || current.getValue() == value) {
+    private Node<T> searchHelper(Node<T> current, T data) {
+        if (current == null || current.getData() == data) {
             return current;
         }
-        if (value < current.getValue()) {
-            return searchHelper(current.getLeft(), value);
+        if (data.compareTo(current.getData()) < 0) {
+            return searchHelper(current.getLeft(), data);
         } else {
-            return searchHelper(current.getRight(), value);
+            return searchHelper(current.getRight(), data);
         }
     }
 
     // remove using search and findMin
-    public void remove(int value) {
-        Node nodeToRemove = search(value);
+    public void remove(T data) {
+        Node<T> nodeToRemove = search(data);
         if (nodeToRemove != null) {
             if (nodeToRemove.getCount() > 1) {
                 nodeToRemove.setCount(nodeToRemove.getCount() - 1);
@@ -76,7 +77,7 @@ public class BinarySearchTree {
             sizeIncludingDups--;
         }
     }
-    private void removeNode(Node nodeToRemove) {
+    private void removeNode(Node<T> nodeToRemove) {
         //node is a leaf
         if(nodeToRemove.getLeft() == null && nodeToRemove.getRight() == null) {
             if (nodeToRemove.getParent() != null) {
@@ -91,7 +92,7 @@ public class BinarySearchTree {
         }
         // node has one child
         else if (nodeToRemove.getLeft() == null || nodeToRemove.getRight() == null) {
-            Node child;
+            Node<T> child;
             if(nodeToRemove.getLeft() != null){
                 child = nodeToRemove.getLeft();
             } else{
@@ -110,13 +111,13 @@ public class BinarySearchTree {
         }
         // node has two children
         else {
-            Node minNode = findMin(nodeToRemove.getRight());
-            nodeToRemove.setValue(minNode.getValue());
+            Node<T> minNode = findMin(nodeToRemove.getRight());
+            nodeToRemove.setData(minNode.getData());
             removeNode(minNode);
         }
     }
-    // finds the minimum value in the right subtree
-    private Node findMin(Node current) {
+    // finds the minimum data in the right subtree
+    private Node<T> findMin(Node<T> current) {
         while (current.getLeft() != null) {
             current = current.getLeft();
         }
@@ -127,25 +128,25 @@ public class BinarySearchTree {
     public void traverse () {
         inOrderTraversal(root);
     }
-    public void inOrderTraversal (Node node) {
+    public void inOrderTraversal (Node<T> node) {
         if (node != null) {
             inOrderTraversal(node.getLeft());
             for (int i=0 ; i<node.getCount() ; i++)
-                System.out.print(node.getValue() + " ");
+                System.out.print(node.getData() + " ");
             inOrderTraversal(node.getRight());
         }
     }
-    public void traverse (Node node, ArrayList<Integer> dropletList) {
+    public void traverse (Node<T> node, ArrayList<T> dropletList) {
         if (node != null) {
             traverse(node.getLeft(), dropletList);
             for (int i=0 ; i<node.getCount() ; i++)
-                dropletList.add(node.getValue());
+                dropletList.add(node.getData());
             traverse(node.getRight(), dropletList);
         }
     }
 
     // Getters
-    public Node getRoot() { return root; }
+    public Node<T> getRoot() { return root; }
     public int getSizeExcludingDups() { return sizeExcludingDups; }
     public int getSizeIncludingDups() { return sizeIncludingDups; }
 }

@@ -37,7 +37,7 @@ public class Round1Panel extends JPanel implements ActionListener {
     private GameFrame gameFrame;
     private Timer timer;
 
-    private Stack rainDrops;
+    private Stack<Droplet> rainDrops;
     private ArrayList<Droplet> activeDroplets;
     private int lastDropHeight;
     private int splashCounter;

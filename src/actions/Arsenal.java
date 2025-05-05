@@ -5,25 +5,26 @@ import java.util.ArrayList;
 import actions.ds.bst.BinarySearchTree;
 import actions.ds.stack.Stack;
 import ui.Droplet;
+import ui.Fireball;
 
 public class Arsenal {
 
-    private static Stack rainDrops;
-    private static Stack dropletStack;
+    private static Stack<Droplet> rainDrops;
+    private static Stack<Droplet> dropletStack;
     private static BinarySearchTree dropletTree;
 
-    private static Stack enemyFireShots;
+    private static Stack<Fireball> enemyFireShots;
     private static int[] playerDroplets;
 
     private static int enemyScore;
     private static int playerScore;
 
     static {
-        rainDrops = new Stack();
-        dropletStack = new Stack();
+        rainDrops = new Stack<>();
+        dropletStack = new Stack<>();
         dropletTree = new BinarySearchTree();
 
-        enemyFireShots = new Stack();
+        enemyFireShots = new Stack<>();
         playerDroplets = new int[0];
 
         enemyScore = 0;
@@ -36,7 +37,7 @@ public class Arsenal {
 
         // Populating the enemyFireShots stack with random fireballs
         for (int i=0 ; i<80 ; i++) {
-            enemyFireShots.push(new Droplet((int) (Math.random() * 100)));
+            enemyFireShots.push(new Fireball((int) (Math.random() * 100), true));
         }
     }
 
@@ -55,20 +56,20 @@ public class Arsenal {
     public static void BSTtoArray () {
         playerDroplets = new int[dropletTree.getSizeIncludingDups()];
         ArrayList<Integer> dropletList = new ArrayList<>();
-        dropletTree.inOrderTraversal(dropletTree.getRoot(), dropletList);
+        dropletTree.traverse(dropletTree.getRoot(), dropletList);
         for (int i=0 ; i<playerDroplets.length ; i++) {
             playerDroplets[i] = dropletList.get(i);
         }
     }
 
     // Getters
-    public static Stack getRainDrops() {
+    public static Stack<Droplet> getRainDrops() {
         return rainDrops;
     }
-    public static Stack getCollectedDroplets() {
+    public static Stack<Droplet> getCollectedDroplets() {
         return dropletStack;
     }
-    public static Stack getEnemyFireShots() {
+    public static Stack<Fireball> getEnemyFireShots() {
         return enemyFireShots;
     }
     public static int[] getPlayerDroplets() {

@@ -1,9 +1,7 @@
 package actions.ds.stack;
 
-import ui.Droplet;
-
-public class Stack {
-    private Node top;
+public class Stack<T> {
+    private Node<T> top;
     private int size;
 
     public Stack() {
@@ -11,26 +9,26 @@ public class Stack {
         this.size = 0;
     }
 
-    public void push(Droplet data) {
-        Node newNode = new Node(data);
+    public void push(T data) {
+        Node<T> newNode = new Node<>(data);
         newNode.setNext(top);
         top = newNode;
         size++;
     }
 
-    public Droplet pop() {
+    public T pop() {
         if (isEmpty()) {
             throw new RuntimeException("Stack is empty");
         }
 
-        Droplet data = top.getData();
+        T data = top.getData();
         top = top.getNext();
         size--;
 
         return data;
     }
     
-    public Droplet peek() {
+    public T peek() {
         if (isEmpty()) {
             throw new RuntimeException("Stack is empty");
         }

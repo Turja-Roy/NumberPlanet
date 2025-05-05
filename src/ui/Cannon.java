@@ -48,6 +48,7 @@ public class Cannon extends JLabel {
     }
 
     // Getters
+    public double getXpos () { return x; }
     public Rectangle getBounds() {
         return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }

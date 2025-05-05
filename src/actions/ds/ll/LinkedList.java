@@ -1,6 +1,8 @@
+package actions.ds.ll;
+
 public class LinkedList {
-    LLNode head;
-    LLNode tail;
+    Node head;
+    Node tail;
     int size;
     public LinkedList() {
         head = null;
@@ -8,7 +10,7 @@ public class LinkedList {
         size = 0;
     }
     public void add(int value) {
-        LLNode newNode = new LLNode(value);
+        Node newNode = new Node(value);
         if (head == null) {
             head = newNode;
             tail = newNode;
@@ -19,8 +21,8 @@ public class LinkedList {
         }
         size++;
     }
-    public LLNode find(int value) {
-        LLNode current = head;
+    public Node find(int value) {
+        Node current = head;
         while (current != null) {
             if (current.getValue() == value) {
                 return current;
@@ -30,7 +32,7 @@ public class LinkedList {
         return null; // Not found
     }
     public void remove(int value) {
-        LLNode current = find(value);
+        Node current = find(value);
         if (current != null) {
             if (current.getPrev() != null) {
                 current.getPrev().setNext(current.getNext());
@@ -46,7 +48,7 @@ public class LinkedList {
         }
     }
     public void printList() {
-        LLNode current = head;
+        Node current = head;
         while (current != null) {
             System.out.print(current.getValue() + " ");
             current = current.getNext();

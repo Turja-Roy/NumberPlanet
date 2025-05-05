@@ -17,19 +17,21 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 
-public class Fireball extends JLabel {
+public class Fireball extends JLabel implements Comparable<Fireball> {
     private double x, y, yvel;
     private int value;
 
-    private boolean hasBurst, hasSplashed;
+    private boolean isFalling, isShooting, hasBurst, hasSplashed;
 
     private int splashX, splashY;
 
-    ImageIcon icon, burstIcon, splashIcon;
+    ImageIcon icon, fallIcon, shootIcon, burstIcon, splashIcon;
 
-    public Fireball (int value, String fallOrShoot) {
-        x = (double) Math.random() * (GameConstants.GAMEWIDTH - 50); // Random x position
-        y = fallOrShoot.equals("fall") ? 0f : GameConstants.GAMEHEIGHT - CannonConstants.CANNON_HEIGHT; // y position based on falling or shooting
+    public Fireball (int value, boolean isFalling) {
+        this.isFalling = isFalling;
+
+        x = isFalling ? (double) Math.random() * (GameConstants.GAMEWIDTH - 50) : 0; // Random x position
+        y = isFalling ? 0f : GameConstants.GAMEHEIGHT - CannonConstants.CANNON_HEIGHT; // y position based on falling or shooting
         yvel = FIREBALL_SPEED;
         this.value = value;
         hasBurst = false;
@@ -37,10 +39,12 @@ public class Fireball extends JLabel {
         splashX = 0;
         splashY = 0;
 
+        // Set the icon for the fireball
+        fallIcon = new ImageIcon("res/fireball.png");
+        fallIcon = new ImageIcon(icon.getImage().getScaledInstance(FIREBALL_WIDTH, FIREBALL_HEIGHT, java.awt.Image.SCALE_SMOOTH)); // resize icon
         // Set the icon for the droplet
-        icon = new ImageIcon("res/fireball.png");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(FIREBALL_WIDTH, FIREBALL_HEIGHT, java.awt.Image.SCALE_SMOOTH)); // resize icon
-
+        shootIcon = new ImageIcon("res/shootingDroplet.png");
+        shootIcon = new ImageIcon(shootIcon.getImage().getScaledInstance(FIREBALL_WIDTH, FIREBALL_HEIGHT+5, java.awt.Image.SCALE_SMOOTH)); // resize icon
         // Set the icon for the burst
         burstIcon = new ImageIcon("res/burst.png");
         burstIcon = new ImageIcon(burstIcon.getImage().getScaledInstance(FIREBALL_WIDTH, FIREBALL_HEIGHT, Image.SCALE_SMOOTH)); // resize icon
@@ -119,5 +123,10 @@ public class Fireball extends JLabel {
     }
     public Rectangle getBounds() {
         return new Rectangle((int)x, (int)y, FIREBALL_WIDTH, FIREBALL_HEIGHT);
+    }
+
+    @Override
+    public int compareTo (Fireball other) {
+        return Integer.compare(this.value, other.value);
     }
 }
