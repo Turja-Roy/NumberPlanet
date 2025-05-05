@@ -12,7 +12,8 @@ public class Arsenal {
     private static Stack dropletStack;
     private static BinarySearchTree dropletTree;
 
-    private static Stack fireShots;
+    private static Stack enemyFireShots;
+    private static int[] playerDroplets;
 
     private static int enemyScore;
     private static int playerScore;
@@ -22,7 +23,8 @@ public class Arsenal {
         dropletStack = new Stack();
         dropletTree = new BinarySearchTree();
 
-        fireShots = new Stack();
+        enemyFireShots = new Stack();
+        playerDroplets = new int[0];
 
         enemyScore = 0;
         playerScore = 0;
@@ -32,9 +34,9 @@ public class Arsenal {
             rainDrops.push(new Droplet((int) (Math.random() * 100)));
         }
 
-        // Populating the fireShots stack with random fireballs
+        // Populating the enemyFireShots stack with random fireballs
         for (int i=0 ; i<80 ; i++) {
-            fireShots.push(new Droplet((int) (Math.random() * 100)));
+            enemyFireShots.push(new Droplet((int) (Math.random() * 100)));
         }
     }
 
@@ -50,6 +52,14 @@ public class Arsenal {
         }
         // dropletTree.traverse();
     }
+    public static void BSTtoArray () {
+        playerDroplets = new int[dropletTree.getSizeIncludingDups()];
+        ArrayList<Integer> dropletList = new ArrayList<>();
+        dropletTree.inOrderTraversal(dropletTree.getRoot(), dropletList);
+        for (int i=0 ; i<playerDroplets.length ; i++) {
+            playerDroplets[i] = dropletList.get(i);
+        }
+    }
 
     // Getters
     public static Stack getRainDrops() {
@@ -58,8 +68,11 @@ public class Arsenal {
     public static Stack getCollectedDroplets() {
         return dropletStack;
     }
-    public static Stack getFireShots() {
-        return fireShots;
+    public static Stack getEnemyFireShots() {
+        return enemyFireShots;
+    }
+    public static int[] getPlayerDroplets() {
+        return playerDroplets;
     }
 
     // Setters

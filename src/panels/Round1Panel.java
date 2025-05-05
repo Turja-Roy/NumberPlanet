@@ -101,6 +101,7 @@ public class Round1Panel extends JPanel implements ActionListener {
         if (rainDrops.isEmpty() && activeDroplets.isEmpty()) {
             timer.stop();
             Arsenal.StackToBST();
+            Arsenal.BSTtoArray();
             transitionToRound2();
 
             return;

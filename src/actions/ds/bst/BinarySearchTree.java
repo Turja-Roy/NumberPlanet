@@ -1,28 +1,29 @@
 package actions.ds.bst;
 
+import java.util.ArrayList;
+
 public class BinarySearchTree {
 
     private Node root;
+    private int sizeExcludingDups; // This size excludes duplicate elements
+    private int sizeIncludingDups; // This size includes duplicate elements
 
     public BinarySearchTree() {
         root = null;
+        sizeIncludingDups = 0;
+        sizeExcludingDups = 0;
     }
 
     // add using recursion
     public void add(int value) {
         Node newNode = new Node(value);
 
-        Node find = search(value);
-        if (find != null) {
-            find.setCount(find.getCount() + 1);
-            return;
-        }
-
         if (root == null) {
             root = newNode;
         } else {
             addHelper(root, newNode);
         }
+        sizeIncludingDups++;
     }
     private void addHelper(Node current, Node newNode) {
         if (newNode.getValue() < current.getValue()) {
@@ -32,6 +33,7 @@ public class BinarySearchTree {
             } else {
                 addHelper(current.getLeft(), newNode);
             }
+            sizeExcludingDups++;
         } else if (newNode.getValue() > current.getValue()) {
             if (current.getRight() == null) {
                 current.setRight(newNode);
@@ -39,6 +41,9 @@ public class BinarySearchTree {
             } else {
                 addHelper(current.getRight(), newNode);
             }
+            sizeExcludingDups++;
+        } else {
+            current.setCount(current.getCount() + 1);
         }
     }
 
@@ -61,10 +66,14 @@ public class BinarySearchTree {
     public void remove(int value) {
         Node nodeToRemove = search(value);
         if (nodeToRemove != null) {
-            if (nodeToRemove.getCount() > 1)
+            if (nodeToRemove.getCount() > 1) {
                 nodeToRemove.setCount(nodeToRemove.getCount() - 1);
-            else
+            }
+            else {
                 removeNode(nodeToRemove);
+                sizeExcludingDups--;
+            }
+            sizeIncludingDups--;
         }
     }
     private void removeNode(Node nodeToRemove) {
@@ -106,6 +115,7 @@ public class BinarySearchTree {
             removeNode(minNode);
         }
     }
+    // finds the minimum value in the right subtree
     private Node findMin(Node current) {
         while (current.getLeft() != null) {
             current = current.getLeft();
@@ -125,4 +135,17 @@ public class BinarySearchTree {
             inOrderTraversal(node.getRight());
         }
     }
+    public void traverse (Node node, ArrayList<Integer> dropletList) {
+        if (node != null) {
+            traverse(node.getLeft(), dropletList);
+            for (int i=0 ; i<node.getCount() ; i++)
+                dropletList.add(node.getValue());
+            traverse(node.getRight(), dropletList);
+        }
+    }
+
+    // Getters
+    public Node getRoot() { return root; }
+    public int getSizeExcludingDups() { return sizeExcludingDups; }
+    public int getSizeIncludingDups() { return sizeIncludingDups; }
 }

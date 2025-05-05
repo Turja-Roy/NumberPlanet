@@ -26,7 +26,8 @@ public class Round2Panel extends JPanel implements ActionListener {
     private GameFrame gameFrame;
     private Timer timer;
     
-    private Stack firesShots;
+    private Stack enemyFireShots;
+    private int[] playerDroplets;
     private ArrayList<Fireball> activeShots;
     private int lastShotHeight;
     private int burstCounter;
@@ -40,7 +41,8 @@ public class Round2Panel extends JPanel implements ActionListener {
 
         bgImage = new ImageIcon("res/bgImage.jpg").getImage();
 
-        firesShots = Arsenal.getFireShots();
+        enemyFireShots = Arsenal.getEnemyFireShots();
+        playerDroplets = Arsenal.getPlayerDroplets();
         activeShots = new ArrayList<>();
         lastShotHeight = 0;
         burstCounter = 0;
@@ -54,44 +56,10 @@ public class Round2Panel extends JPanel implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        if (firesShots.isEmpty() && activeShots.isEmpty()) {
-            Arsenal.StackToBST();
-            return;
-        }
-
-        if (!firesShots.isEmpty() && lastShotHeight >= GameConstants.GAMEHEIGHT / 3) {
-            // activeShots.add(firesShots.pop());
-            // lastShotHeight = 0;
-        }
-
-        Fireball burstFireball = null;
-        try {
-        for (Fireball fireball : activeShots) {
-            fireball.fall();
-
-            // Check for collection or out of bounds
-            if (!fireball.hasBurst() && cannon.getBounds().intersects(fireball.getBounds())) {
-                // cannon.setShowGlow(true);
-                // Arsenal.collectDroplet(fireball);
-                // activeShots.remove(fireball);
-                // ((GamePanel)getParent()).addCollectedDroplet(fireball.getValue());
-            }
-            else if (fireball.hasBurst()) {
-                burstFireball = fireball;
-            }
-        }
-        } catch (ConcurrentModificationException ex) {
-            System.out.println("Concurrent modification exception caught: " + ex.getMessage());
-        }
-
-        if (burstCounter > 200) {
-            activeShots.remove(burstFireball);
-            burstCounter = 0;
-        }
-
-        lastShotHeight += FireballConstants.FIREBALL_SPEED;
-        burstCounter++;
+    public void actionPerformed (ActionEvent e) {
+        updateEnemyFireballs();
+        updatePlayerDroplets();
+        checkCollisions();
         repaint();
     }
 
@@ -106,6 +74,17 @@ public class Round2Panel extends JPanel implements ActionListener {
         }
 
         cannon.draw(g);
+    }
+
+    // Action methods
+    private void updateEnemyFireballs () {
+
+    }
+    private void updatePlayerDroplets () {
+
+    }
+    private void checkCollisions () {
+
     }
 
     public void handleButtonClick (int value) {
