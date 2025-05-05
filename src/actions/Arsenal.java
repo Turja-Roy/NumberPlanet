@@ -1,8 +1,7 @@
 package actions;
 
-import java.util.ArrayList;
-
 import actions.ds.bst.BinarySearchTree;
+import actions.ds.ll.DLL;
 import actions.ds.stack.Stack;
 import ui.Droplet;
 import ui.Fireball;
@@ -11,10 +10,10 @@ public class Arsenal {
 
     private static Stack<Droplet> rainDrops;
     private static Stack<Droplet> dropletStack;
-    private static BinarySearchTree dropletTree;
+    private static BinarySearchTree<Droplet> dropletTree;
 
     private static Stack<Fireball> enemyFireShots;
-    private static int[] playerDroplets;
+    private static DLL<Fireball> playerDroplets;
 
     private static int enemyScore;
     private static int playerScore;
@@ -22,10 +21,10 @@ public class Arsenal {
     static {
         rainDrops = new Stack<>();
         dropletStack = new Stack<>();
-        dropletTree = new BinarySearchTree();
+        dropletTree = new BinarySearchTree<>();
 
         enemyFireShots = new Stack<>();
-        playerDroplets = new int[0];
+        playerDroplets = new DLL<>();
 
         enemyScore = 0;
         playerScore = 0;
@@ -49,17 +48,12 @@ public class Arsenal {
     }
     public static void StackToBST () {
         while (!dropletStack.isEmpty()) {
-            dropletTree.add(dropletStack.pop().getValue());
+            dropletTree.add(dropletStack.pop());
         }
         // dropletTree.traverse();
     }
-    public static void BSTtoArray () {
-        playerDroplets = new int[dropletTree.getSizeIncludingDups()];
-        ArrayList<Integer> dropletList = new ArrayList<>();
-        dropletTree.traverse(dropletTree.getRoot(), dropletList);
-        for (int i=0 ; i<playerDroplets.length ; i++) {
-            playerDroplets[i] = dropletList.get(i);
-        }
+    public static void BSTtoList () {
+        dropletTree.traverse(dropletTree.getRoot(), playerDroplets);
     }
 
     // Getters
@@ -72,7 +66,7 @@ public class Arsenal {
     public static Stack<Fireball> getEnemyFireShots() {
         return enemyFireShots;
     }
-    public static int[] getPlayerDroplets() {
+    public static DLL<Fireball> getPlayerDroplets() {
         return playerDroplets;
     }
 

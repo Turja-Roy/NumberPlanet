@@ -41,7 +41,7 @@ public class Fireball extends JLabel implements Comparable<Fireball> {
 
         // Set the icon for the fireball
         fallIcon = new ImageIcon("res/fireball.png");
-        fallIcon = new ImageIcon(icon.getImage().getScaledInstance(FIREBALL_WIDTH, FIREBALL_HEIGHT, java.awt.Image.SCALE_SMOOTH)); // resize icon
+        fallIcon = new ImageIcon(fallIcon.getImage().getScaledInstance(FIREBALL_WIDTH, FIREBALL_HEIGHT, java.awt.Image.SCALE_SMOOTH)); // resize icon
         // Set the icon for the droplet
         shootIcon = new ImageIcon("res/shootingDroplet.png");
         shootIcon = new ImageIcon(shootIcon.getImage().getScaledInstance(FIREBALL_WIDTH, FIREBALL_HEIGHT+5, java.awt.Image.SCALE_SMOOTH)); // resize icon
@@ -51,6 +51,8 @@ public class Fireball extends JLabel implements Comparable<Fireball> {
         // Set the icon for the splash
         splashIcon = new ImageIcon("res/splash.png");
         splashIcon = new ImageIcon(splashIcon.getImage().getScaledInstance(FIREBALL_WIDTH, FIREBALL_HEIGHT, Image.SCALE_SMOOTH)); // resize icon
+
+        icon = isFalling ? fallIcon : shootIcon;
 
         setBounds((int) x, (int) y, FIREBALL_WIDTH, FIREBALL_HEIGHT); // Set the bounds of the droplet
     }
@@ -110,11 +112,15 @@ public class Fireball extends JLabel implements Comparable<Fireball> {
         splashY = y;
         hasSplashed = true; // Mark as splashed
     }
+    public boolean intersect (Fireball other) {
+        return this.getBounds().intersects(other.getBounds());
+    }
 
     // Getters
     public double getXpos () { return (double) x; }
     public double getYpos () { return (double) y; }
     public boolean hasBurst () { return hasBurst; }
+    public boolean hasSplashed () { return hasSplashed; }
     public int getValue () { return value; }
     public ImageIcon getNormalIcon () {
         icon = new ImageIcon("res/fireball.png");
@@ -124,6 +130,11 @@ public class Fireball extends JLabel implements Comparable<Fireball> {
     public Rectangle getBounds() {
         return new Rectangle((int)x, (int)y, FIREBALL_WIDTH, FIREBALL_HEIGHT);
     }
+
+    // Setters
+    public void setValue (int value) { this.value = value; }
+    public void setBurst (boolean hasBurst) { this.hasBurst = hasBurst; }
+    public void setSplash (boolean hasSplashed) { this.hasSplashed = hasSplashed; }
 
     @Override
     public int compareTo (Fireball other) {

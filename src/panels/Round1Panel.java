@@ -101,7 +101,7 @@ public class Round1Panel extends JPanel implements ActionListener {
         if (rainDrops.isEmpty() && activeDroplets.isEmpty()) {
             timer.stop();
             Arsenal.StackToBST();
-            Arsenal.BSTtoArray();
+            Arsenal.BSTtoList();
             transitionToRound2();
 
             return;
@@ -128,9 +128,7 @@ public class Round1Panel extends JPanel implements ActionListener {
                 splashedDroplet = droplet;
             }
         }
-        } catch (ConcurrentModificationException ex) {
-            // System.out.println("Concurrent modification exception caught: " + ex.getMessage());
-        }
+        } catch (ConcurrentModificationException ex) { }
 
         if (splashCounter > 200) {
             activeDroplets.remove(splashedDroplet);

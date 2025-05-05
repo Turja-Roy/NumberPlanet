@@ -1,20 +1,22 @@
 package actions.ds.ll;
 
-public class Node {
-    int value;
-    Node next;
-    Node prev;
-    int count;
-    public Node(int value) {
-        this.value = value;
+public class Node<T extends Comparable<T>> {
+
+    private T data;
+    private int count;
+    private Node<T> next;
+    private Node<T> prev;
+
+    public Node(T data) {
+        this.data = data;
         this.prev = null;
         this.next = null;
         this.count = 0;
     }
-    public int getValue() {return value;}
-    public void setValue(int value) {this.value = value;}
-    public Node getPrev() {return prev;}
-    public void setPrev(Node prev) {this.prev = prev;}
-    public Node getNext() {return next;}
-    public void setNext(Node next) {this.next = next;}
+    public T getData() {return data;}
+    public void setData(T data) {this.data = data;}
+    public Node<T> getPrev() {return prev;}
+    public void setPrev(Node<T> prev) {this.prev = prev;}
+    public Node<T> getNext() {return next;}
+    public void setNext(Node<T> next) {this.next = next;}
 }
