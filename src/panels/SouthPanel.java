@@ -26,21 +26,31 @@ public class SouthPanel extends JPanel implements KeyListener {
     private BinarySearchTree<SouthPanelLabel> labelTree;
     private StringBuilder numberInput;
 
+    private JLabel inputFeedback; // For debugging
+
     public SouthPanel() {
         playerDroplets = Arsenal.getPlayerDroplets();
         numberInput = new StringBuilder();
+
         initLabelTree();
+        addLabelsFromTree(labelTree.getRoot());
 
         setBackground(Color.BLACK);
         setPreferredSize(new Dimension(GameConstants.GAMEWIDTH, GameConstants.SOUTHPANEL_HEIGHT));
         setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+
+        // Inputfeedback for debugging
+        inputFeedback = new JLabel();
+        inputFeedback.setForeground(Color.YELLOW);
+        inputFeedback.setFont(new Font("Arial", Font.BOLD, 16));
+        add(inputFeedback);
 
         setFocusable(true);
         requestFocusInWindow();
         addKeyListener(this);
     }
 
-    public void initLabelTree() {
+    private void initLabelTree() {
         removeAll();
         labelTree = new BinarySearchTree<>();
         
@@ -49,10 +59,17 @@ public class SouthPanel extends JPanel implements KeyListener {
             SouthPanelLabel label = new SouthPanelLabel(curr.getData().getValue());
 
             labelTree.add(label);
-            add(label);
 
             curr = curr.getNext();
         }
+    }
+
+    private void addLabelsFromTree (actions.ds.bst.Node<SouthPanelLabel> node) {
+        if (node == null) return;
+
+        addLabelsFromTree(node.getLeft());
+        add(node.getData());
+        addLabelsFromTree(node.getRight());
     }
 
     @Override
@@ -62,18 +79,46 @@ public class SouthPanel extends JPanel implements KeyListener {
     public void keyPressed(KeyEvent e) {
         if (Character.isDigit(e.getKeyChar())) {
             numberInput.append(e.getKeyChar());
-            System.out.println(e.getKeyChar());
+            updateInputFeedback();
         }
         else if (e.getKeyCode() == KeyEvent.VK_ENTER && numberInput.length() > 0) {
-            System.out.println("Entered number: " + numberInput.toString());
-            int value = Integer.parseInt(numberInput.toString());
-            labelTree.search(new SouthPanelLabel(value)).getData().setActive();
-            repaint();
-            numberInput.setLength(0);
+            handleEnterPress();
         }
         else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE && numberInput.length() > 0) {
             numberInput.deleteCharAt(numberInput.length() - 1);
         }
+    }
+
+    private void handleEnterPress() {
+        if (numberInput.length() == 0) return;
+
+        try {
+            int value = Integer.parseInt(numberInput.toString());
+            actions.ds.bst.Node<SouthPanelLabel> found = labelTree.search(new SouthPanelLabel(value));
+
+            if (found != null) {
+                if (found.getCount() > 1) {
+                    found.getData().setActive();
+                    labelTree.remove(found.getData());
+                } else if (found.getCount() == 1) {
+                    found.getData().setInactive();
+                    found.setCount(0);
+                } else {
+                    inputFeedback.setForeground(Color.RED);
+                    inputFeedback.setText("Input: " + value);
+                }
+                repaint();
+            } else {
+                inputFeedback.setForeground(Color.RED);
+                inputFeedback.setText("Input: " + value);
+            }
+        } catch (NumberFormatException ex) {
+            System.err.println("Invalid number format");
+            inputFeedback.setForeground(Color.RED);
+            inputFeedback.setText("Invalid");
+        }
+
+        numberInput.setLength(0);
     }
 
     @Override
@@ -87,5 +132,10 @@ public class SouthPanel extends JPanel implements KeyListener {
     public void requestFocus() {
         super.requestFocus();
         requestFocusInWindow();
+    }
+
+    private void updateInputFeedback() {
+        inputFeedback.setForeground(Color.YELLOW);
+        inputFeedback.setText("Input: " + numberInput.toString());
     }
 }

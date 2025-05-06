@@ -31,6 +31,7 @@ public class Arsenal {
 
         // Populating the rainDrops stack with random droplets
         for (int i=0 ; i<10 ; i++) {
+            // rainDrops.push(new Droplet(55)); // For debugging
             rainDrops.push(new Droplet((int) (Math.random() * 100)));
         }
 

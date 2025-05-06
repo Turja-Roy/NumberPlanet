@@ -18,6 +18,9 @@ public class SouthPanelLabel extends JLabel implements Comparable<SouthPanelLabe
     public void setActive () {
         setForeground(Color.YELLOW);
     }
+    public void setNormal () {
+        setForeground(Color.WHITE);
+    }
     public void setInactive () {
         setForeground(Color.GRAY);
     }

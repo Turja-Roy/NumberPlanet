@@ -54,13 +54,15 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     // search using recursion
-    public Node<T> search(T data) { return searchHelper(root, data);
+    public Node<T> search(T data) {
+        return searchHelper(root, data);
     }
     private Node<T> searchHelper(Node<T> current, T data) {
-        if (current == null || current.getData() == data) {
+        if (current == null) return null;
+
+        if (data.compareTo(current.getData()) == 0) {
             return current;
-        }
-        if (data.compareTo(current.getData()) < 0) {
+        } else if (data.compareTo(current.getData()) < 0) {
             return searchHelper(current.getLeft(), data);
         } else {
             return searchHelper(current.getRight(), data);
@@ -133,28 +135,28 @@ public class BinarySearchTree<T extends Comparable<T>> {
         inOrderTraversal(root);
     }
     public void inOrderTraversal (Node<T> node) {
-        if (node != null) {
-            inOrderTraversal(node.getLeft());
-            for (int i=0 ; i<node.getCount() ; i++)
-                System.out.print(node.getData() + " ");
-            inOrderTraversal(node.getRight());
-        }
+        if (node == null) return;
+
+        inOrderTraversal(node.getLeft());
+        for (int i=0 ; i<node.getCount() ; i++)
+        System.out.print(node.getData() + " ");
+        inOrderTraversal(node.getRight());
     }
     public void traverse (Node<Droplet> node, DLL<Fireball> dropletList) {
-        if (node != null) {
-            traverse(node.getLeft(), dropletList);
-            for (int i=0 ; i<node.getCount() ; i++)
-                dropletList.add(new Fireball(node.getData().getValue(), false));
-            traverse(node.getRight(), dropletList);
-        }
+        if (node == null) return;
+
+        traverse(node.getLeft(), dropletList);
+        for (int i=0 ; i<node.getCount() ; i++)
+            dropletList.add(new Fireball(node.getData().getValue(), false));
+        traverse(node.getRight(), dropletList);
     }
     public void traverseToArray (Node<Droplet> node, ArrayList<Droplet> dropletList) {
-        if (node != null) {
-            traverseToArray(node.getLeft(), dropletList);
-            for (int i=0 ; i<node.getCount() ; i++)
-                dropletList.add(node.getData());
-            traverseToArray(node.getRight(), dropletList);
-        }
+        if (node == null) return;
+
+        traverseToArray(node.getLeft(), dropletList);
+        for (int i=0 ; i<node.getCount() ; i++)
+        dropletList.add(node.getData());
+        traverseToArray(node.getRight(), dropletList);
     }
 
     // Getters
