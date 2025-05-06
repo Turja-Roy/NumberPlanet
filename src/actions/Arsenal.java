@@ -1,7 +1,6 @@
 package actions;
 
 import actions.ds.bst.BinarySearchTree;
-import actions.ds.ll.DLL;
 import actions.ds.stack.Stack;
 import ui.Droplet;
 import ui.Fireball;
@@ -14,18 +13,15 @@ public class Arsenal {
     private static BinarySearchTree<Droplet> dropletTree;
 
     private static Stack<Fireball> enemyFireShots;
-    private static DLL<Fireball> playerDropletsDLL;
 
     private static int enemyScore;
     private static int playerScore;
 
     static {
         rainDrops = new Stack<>();
-        dropletStack = new Stack<>();
         dropletTree = new BinarySearchTree<>();
 
         enemyFireShots = new Stack<>();
-        playerDropletsDLL = new DLL<>();
 
         enemyScore = 0;
         playerScore = 0;
@@ -44,24 +40,14 @@ public class Arsenal {
     // Action methods
     public static void collectDroplet(Droplet droplet) {
         if (droplet != null) {
-            dropletStack.push(droplet);
+            dropletTree.add(droplet);
         }
-    }
-    public static void StackToBST () {
-        while (!dropletStack.isEmpty()) {
-            dropletTree.add(dropletStack.pop());
-        }
-    }
-    public static void BSTtoList () {
-        dropletTree.traverse(dropletTree.getRoot(), playerDropletsDLL);
     }
 
     // Getters
     public static Stack<Droplet> getRainDrops() { return rainDrops; }
-    public static Stack<Droplet> getCollectedDroplets() { return dropletStack; }
     public static Stack<Fireball> getEnemyFireShots() { return enemyFireShots; }
     public static BinarySearchTree<Droplet> getDropletTree() { return dropletTree; }
-    public static DLL<Fireball> getPlayerDropletsDLL() { return playerDropletsDLL; }
     public static int getEnemyScore() { return enemyScore; }
     public static int getPlayerScore() { return playerScore; }
 

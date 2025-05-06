@@ -1,9 +1,5 @@
 package actions.ds.bst;
 
-import actions.ds.ll.DLL;
-import ui.Droplet;
-import ui.Fireball;
-
 public class BinarySearchTree<T extends Comparable<T>> {
 
     private Node<T> root;
@@ -137,16 +133,8 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
         inOrderTraversal(node.getLeft());
         for (int i=0 ; i<node.getCount() ; i++)
-        System.out.print(node.getData() + " ");
+            System.out.print(node.getData() + " ");
         inOrderTraversal(node.getRight());
-    }
-    public void traverse (Node<Droplet> node, DLL<Fireball> dropletList) {
-        if (node == null) return;
-
-        traverse(node.getLeft(), dropletList);
-        for (int i=0 ; i<node.getCount() ; i++)
-            dropletList.add(new Fireball(node.getData().getValue(), false));
-        traverse(node.getRight(), dropletList);
     }
 
     // Getters

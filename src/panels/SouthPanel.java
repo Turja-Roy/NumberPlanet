@@ -12,26 +12,27 @@ import javax.swing.JPanel;
 
 import actions.Arsenal;
 import actions.ds.bst.BinarySearchTree;
-import actions.ds.ll.DLL;
 import panels.GamePanel;
-import ui.Fireball;
+import ui.Droplet;
 import ui.SouthPanelLabel;
 
 import utilz.Constants.GameConstants;
 
 public class SouthPanel extends JPanel implements KeyListener {
 
-    private DLL<Fireball> playerDropletsDLL;
+    private BinarySearchTree<Droplet> dropletTree;
     private BinarySearchTree<SouthPanelLabel> labelTree;
     private StringBuilder numberInput;
 
     private JLabel inputFeedback; // For debugging
 
     public SouthPanel() {
-        playerDropletsDLL = Arsenal.getPlayerDropletsDLL();
+        dropletTree = Arsenal.getDropletTree();
         numberInput = new StringBuilder();
 
-        initLabelTree();
+        removeAll();
+        labelTree = new BinarySearchTree<>();
+        initLabelTree(dropletTree.getRoot());
         addLabelsFromTree(labelTree.getRoot());
 
         setBackground(Color.BLACK);
@@ -49,18 +50,13 @@ public class SouthPanel extends JPanel implements KeyListener {
         addKeyListener(this);
     }
 
-    private void initLabelTree() {
-        removeAll();
-        labelTree = new BinarySearchTree<>();
-        
-        actions.ds.ll.Node<Fireball> curr = playerDropletsDLL.getHead();
-        while (curr != null) {
-            SouthPanelLabel label = new SouthPanelLabel(curr.getData().getValue());
+    private void initLabelTree(actions.ds.bst.Node<Droplet> node) {
+        if (node == null) return;
 
-            labelTree.add(label);
-
-            curr = curr.getNext();
-        }
+        initLabelTree(node.getLeft());
+        for (int i=0 ; i<node.getCount() ; i++)
+            labelTree.add(new SouthPanelLabel(node.getData().getValue()));
+        initLabelTree(node.getRight());
     }
 
     private void addLabelsFromTree (actions.ds.bst.Node<SouthPanelLabel> node) {

@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import actions.Arsenal;
-import actions.ds.bst.BinarySearchTree;
 import actions.ds.stack.Stack;
 
 import javax.swing.ImageIcon;
@@ -31,7 +30,6 @@ public class Round2Panel extends JPanel implements ActionListener {
     private boolean gameEnded = false;
     
     private Stack<Fireball> enemyFireShots; // Enemy's arsenal
-    private BinarySearchTree<Droplet> playerDropletsBST; // Player's arsenal
 
     private Fireball burstFireball, splashFireball;
     private int burstCounter, splashCounter;
