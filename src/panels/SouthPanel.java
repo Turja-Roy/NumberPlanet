@@ -6,7 +6,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,21 +14,21 @@ import actions.Arsenal;
 import actions.ds.bst.BinarySearchTree;
 import actions.ds.ll.DLL;
 import panels.GamePanel;
-import ui.Droplet;
 import ui.Fireball;
 import ui.SouthPanelLabel;
+
 import utilz.Constants.GameConstants;
 
 public class SouthPanel extends JPanel implements KeyListener {
 
-    private DLL<Fireball> playerDroplets;
+    private DLL<Fireball> playerDropletsDLL;
     private BinarySearchTree<SouthPanelLabel> labelTree;
     private StringBuilder numberInput;
 
     private JLabel inputFeedback; // For debugging
 
     public SouthPanel() {
-        playerDroplets = Arsenal.getPlayerDroplets();
+        playerDropletsDLL = Arsenal.getPlayerDropletsDLL();
         numberInput = new StringBuilder();
 
         initLabelTree();
@@ -54,7 +53,7 @@ public class SouthPanel extends JPanel implements KeyListener {
         removeAll();
         labelTree = new BinarySearchTree<>();
         
-        actions.ds.ll.Node<Fireball> curr = playerDroplets.getHead();
+        actions.ds.ll.Node<Fireball> curr = playerDropletsDLL.getHead();
         while (curr != null) {
             SouthPanelLabel label = new SouthPanelLabel(curr.getData().getValue());
 

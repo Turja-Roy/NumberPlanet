@@ -5,18 +5,19 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
 
 import javax.swing.JPanel;
+
+import actions.ds.ll.DLL;
 
 import utilz.Constants.GameConstants;
 
 public class WestPanel extends JPanel {
 
-    private ArrayList<Integer> collectedDroplets;
+    private DLL<Integer> collectedDroplets;
 
     public WestPanel () {
-        collectedDroplets = new ArrayList<>();
+        collectedDroplets = new DLL<>();
 
         setBackground(Color.BLACK);
         setPreferredSize(new Dimension(GameConstants.WESTPANEL_WIDTH, GameConstants.GAMEHEIGHT));
@@ -38,16 +39,19 @@ public class WestPanel extends JPanel {
         g2d.rotate(Math.toRadians(270), 32, yPos);
         
         String text="Collection Stack:    "; // Collected droplets list into string
-        for (int i=collectedDroplets.size()-1 ; i>=0 ; i--)
-            text += collectedDroplets.get(i) + ",    ";
+        actions.ds.ll.Node<Integer> curr = collectedDroplets.getTail();
+        while (curr != null) {
+            text += curr.getData() + ",    ";
+            curr = curr.getPrev();
+        }
 
         g2d.drawString(text, 32, yPos);
     }
 
     public void addCollectedDroplet (int value) {
-        collectedDroplets.add(value);
-        if (collectedDroplets.size() > 11) {
-            collectedDroplets.remove(0); // Remove the oldest droplet if more than 11
+        collectedDroplets.add((Integer) value);
+        if (collectedDroplets.getSize() > GameConstants.WESTPANEL_STACK_LENGTH) {
+            collectedDroplets.remove(collectedDroplets.getHead().getData()); // Remove the oldest droplet if more than the limit
         }
         repaint();
     }
