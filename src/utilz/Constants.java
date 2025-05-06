@@ -1,8 +1,12 @@
 package utilz;
 
 import main.GameFrame;
+import main.ImplementedDS;
 
 public class Constants {
+
+    // public static final ImplementedDS IMPLEMENTED_DS = ImplementedDS.BINARYSEARCHTREE;
+    public static final ImplementedDS IMPLEMENTED_DS = ImplementedDS.HASHTABLE;
 
     public static class GameConstants {
         public static final int GAMEWIDTH = 1300;

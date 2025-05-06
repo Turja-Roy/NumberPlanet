@@ -7,8 +7,8 @@ public class HashTable {
 
     public static int TABLE_SIZE = 100; 
     @SuppressWarnings("unchecked")
-    public static DLL<Integer>[] table = (DLL<Integer>[]) new DLL[TABLE_SIZE];
-    public static int size = 0; // number of elements in the hash table
+    private DLL<Integer>[] table = (DLL<Integer>[]) new DLL[TABLE_SIZE];
+    private int size = 0; // number of elements in the hash table
 
     public HashTable() {
         for (int i = 0; i < TABLE_SIZE; i++) {
@@ -34,13 +34,18 @@ public class HashTable {
         table[index].remove(key); // remove the key from the linked list at that index
         size--; // decrement the size of the hash table
     }
-    public void printTable() {
+    public void traverseAll() {
         for (int i = 0; i < TABLE_SIZE; i++) {
-            System.out.print("Index " + i + ": ");
-            table[i].traverse(); // print the linked list at that index
+            if (!table[i].isEmpty()) {
+                System.out.print("Index " + i + ": ");
+                table[i].traverse(); // traverse the linked list at that index
+            }       
         }
     }
     public int getSize() {
         return size; // return the size of the hash table
+    }
+    public DLL<Integer> getList(int index) {
+        return table[index]; // return the linked list at the given index
     }
 }

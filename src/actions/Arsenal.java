@@ -1,16 +1,21 @@
 package actions;
 
+import actions.ds.HashTable;
 import actions.ds.bst.BinarySearchTree;
 import actions.ds.stack.Stack;
+import main.ImplementedDS;
 import ui.Droplet;
 import ui.Fireball;
+import utilz.Constants;
 import utilz.Constants.GameConstants;
 
 public class Arsenal {
 
     private static Stack<Droplet> rainDrops;
     private static Stack<Droplet> dropletStack;
+
     private static BinarySearchTree<Droplet> dropletTree;
+    private static HashTable dropletTable;
 
     private static Stack<Fireball> enemyFireShots;
 
@@ -20,6 +25,7 @@ public class Arsenal {
     static {
         rainDrops = new Stack<>();
         dropletTree = new BinarySearchTree<>();
+        dropletTable = new HashTable();
 
         enemyFireShots = new Stack<>();
 
@@ -39,8 +45,11 @@ public class Arsenal {
 
     // Action methods
     public static void collectDroplet(Droplet droplet) {
-        if (droplet != null) {
+        if (droplet != null && Constants.IMPLEMENTED_DS == ImplementedDS.BINARYSEARCHTREE) {
             dropletTree.add(droplet);
+        }
+        else if (droplet != null && Constants.IMPLEMENTED_DS == ImplementedDS.HASHTABLE) {
+            dropletTable.insert(droplet.getValue());
         }
     }
 
@@ -48,6 +57,7 @@ public class Arsenal {
     public static Stack<Droplet> getRainDrops() { return rainDrops; }
     public static Stack<Fireball> getEnemyFireShots() { return enemyFireShots; }
     public static BinarySearchTree<Droplet> getDropletTree() { return dropletTree; }
+    public static HashTable getDropletTable() { return dropletTable; }
     public static int getEnemyScore() { return enemyScore; }
     public static int getPlayerScore() { return playerScore; }
 

@@ -63,4 +63,5 @@ public class DLL<T extends Comparable<T>> {
     public Node<T> getHead() { return head; }
     public Node<T> getTail() { return tail; }
     public int getSize() { return size; }
+    public boolean isEmpty() { return size == 0; }
 }
