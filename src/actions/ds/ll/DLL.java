@@ -26,7 +26,7 @@ public class DLL<T extends Comparable<T>> {
     public Node<T> find(T data) {
         Node<T> current = head;
         while (current != null) {
-            if (current.getData() == data) {
+            if (current.getData().compareTo(data) == 0) {
                 return current;
             }
             current = current.getNext();
@@ -49,7 +49,8 @@ public class DLL<T extends Comparable<T>> {
             size--;
         }
     }
-    public void printList() {
+
+    public void traverse() {
         Node<T> current = head;
         while (current != null) {
             System.out.print(current.getData() + " ");

@@ -1,23 +1,16 @@
 package panels;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
 
 import actions.Arsenal;
-import actions.ds.Pair;
 import actions.ds.bst.BinarySearchTree;
-import actions.ds.ll.DLL;
 import actions.ds.stack.Stack;
 
 import javax.swing.ImageIcon;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
 import javax.swing.Timer;
@@ -28,10 +21,8 @@ import ui.Droplet;
 import ui.Fireball;
 import ui.ScoreCard;
 import ui.Cannon;
-import utilz.Constants.CannonConstants;
-import utilz.Constants.FireballConstants;
+
 import utilz.Constants.GameConstants;
-import static utilz.Constants.FireballConstants;
 
 public class Round2Panel extends JPanel implements ActionListener {
 

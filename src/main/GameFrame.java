@@ -38,47 +38,12 @@ public class GameFrame extends JFrame {
         this.gamePanel = new GamePanel(this);
         this.add(gamePanel);
     }
-    // public void addRound1Panel () {
-    //     this.round1Panel = new Round1Panel(this);
-    //     this.add(round1Panel);
-    // }
 
-    // Method for removing all panels
-    public void removePanels () {
-        try {
-            this.remove(introPanel);
-        } catch (Exception e) { }
-        try {
-            this.remove(gamePanel);
-        } catch (Exception e) { }
-        // try {
-        //     this.remove(round1Panel);
-        // } catch (Exception e) { }
-    }
-
-    // Methods for switching panels
+    // Method for switching panels
     public void switchToGamePanel () {
-        removePanels();
+        remove(introPanel);
         addGamePanel();
         this.revalidate();
         this.repaint();
-    }
-    public void switchToIntroPanel () {
-        removePanels();
-        addIntroPanel();
-        this.revalidate();
-        this.repaint();
-    }
-    // public void switchToRoun1Panel () {
-    //     removePanels();
-    //     addRound1Panel();
-    //     this.revalidate();
-    //     this.repaint();
-    // }
-    public void returnToMainMenu() {
-        getContentPane().removeAll();
-        add(new IntroPanel(this));
-        revalidate();
-        repaint();
     }
 }

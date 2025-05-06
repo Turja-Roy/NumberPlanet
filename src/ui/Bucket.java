@@ -3,12 +3,9 @@ package ui;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.Timer;
 
 import utilz.Constants.GameConstants;
 import static utilz.Constants.BucketConstants.*;

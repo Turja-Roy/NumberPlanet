@@ -37,7 +37,7 @@ public class HashTable {
     public void printTable() {
         for (int i = 0; i < TABLE_SIZE; i++) {
             System.out.print("Index " + i + ": ");
-            table[i].printList(); // print the linked list at that index
+            table[i].traverse(); // print the linked list at that index
         }
     }
     public int getSize() {

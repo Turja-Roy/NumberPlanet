@@ -1,7 +1,5 @@
 package actions.ds.bst;
 
-import java.util.ArrayList;
-
 import actions.ds.ll.DLL;
 import ui.Droplet;
 import ui.Fireball;
@@ -149,14 +147,6 @@ public class BinarySearchTree<T extends Comparable<T>> {
         for (int i=0 ; i<node.getCount() ; i++)
             dropletList.add(new Fireball(node.getData().getValue(), false));
         traverse(node.getRight(), dropletList);
-    }
-    public void traverseToArray (Node<Droplet> node, ArrayList<Droplet> dropletList) {
-        if (node == null) return;
-
-        traverseToArray(node.getLeft(), dropletList);
-        for (int i=0 ; i<node.getCount() ; i++)
-        dropletList.add(node.getData());
-        traverseToArray(node.getRight(), dropletList);
     }
 
     // Getters

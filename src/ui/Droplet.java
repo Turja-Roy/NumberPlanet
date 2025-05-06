@@ -4,8 +4,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import utilz.Constants.BucketConstants;
-import utilz.Constants.GameConstants;
-
 import static utilz.Constants.GameConstants;
 import static utilz.Constants.DropletConstants.*;
 

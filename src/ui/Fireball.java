@@ -4,7 +4,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import utilz.Constants.CannonConstants;
-
 import static utilz.Constants.GameConstants;
 import static utilz.Constants.FireballConstants.*;
 
@@ -41,7 +40,7 @@ public class Fireball extends JLabel implements Comparable<Fireball> {
         fallIcon = new ImageIcon(fallIcon.getImage().getScaledInstance(FIREBALL_WIDTH, FIREBALL_HEIGHT, java.awt.Image.SCALE_SMOOTH)); // resize icon
         // Set the icon for the droplet
         shootIcon = new ImageIcon("res/shootingDroplet.png");
-        shootIcon = new ImageIcon(shootIcon.getImage().getScaledInstance(FIREBALL_WIDTH, FIREBALL_HEIGHT+5, java.awt.Image.SCALE_SMOOTH)); // resize icon
+        shootIcon = new ImageIcon(shootIcon.getImage().getScaledInstance(FIREBALL_WIDTH, FIREBALL_HEIGHT, java.awt.Image.SCALE_SMOOTH)); // resize icon
         // Set the icon for the burst
         burstIcon = new ImageIcon("res/burst.png");
         burstIcon = new ImageIcon(burstIcon.getImage().getScaledInstance(FIREBALL_WIDTH, FIREBALL_HEIGHT, Image.SCALE_SMOOTH)); // resize icon

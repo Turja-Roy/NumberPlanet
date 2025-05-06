@@ -2,28 +2,15 @@ package panels;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import actions.Arsenal;
-import actions.ds.stack.Stack;
 import main.GameFrame;
-import main.Main;
 import panels.Round1Panel;
 import panels.Round2Panel;
 import panels.SouthPanel;
 import panels.WestPanel;
-import ui.Droplet;
 
-import utilz.Constants.DropletConstants;
 import static utilz.Constants.GameConstants;
 
 public class GamePanel extends JPanel {

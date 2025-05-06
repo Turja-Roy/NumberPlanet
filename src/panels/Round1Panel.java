@@ -1,11 +1,8 @@
 package panels;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -19,18 +16,16 @@ import actions.Arsenal;
 import actions.ds.stack.Stack;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
 
 import main.GameFrame;
-import main.Main;
 import panels.TransitionPanel;
 import ui.Bucket;
 import ui.Droplet;
-import utilz.Constants.DropletConstants;
 
-import static utilz.Constants.GameConstants;
+import utilz.Constants.DropletConstants;
+import utilz.Constants.GameConstants;
 
 public class Round1Panel extends JPanel implements ActionListener {
 

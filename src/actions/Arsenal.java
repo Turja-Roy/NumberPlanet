@@ -13,7 +13,7 @@ public class Arsenal {
     private static BinarySearchTree<Droplet> dropletTree;
 
     private static Stack<Fireball> enemyFireShots;
-    private static DLL<Fireball> playerDroplets;
+    private static DLL<Fireball> playerDropletsDLL;
 
     private static int enemyScore;
     private static int playerScore;
@@ -24,18 +24,18 @@ public class Arsenal {
         dropletTree = new BinarySearchTree<>();
 
         enemyFireShots = new Stack<>();
-        playerDroplets = new DLL<>();
+        playerDropletsDLL = new DLL<>();
 
         enemyScore = 0;
         playerScore = 0;
 
         // Populating the rainDrops stack with random droplets
-        for (int i=0 ; i<5 ; i++) {
+        for (int i=0 ; i<100 ; i++) {
             rainDrops.push(new Droplet((int) (Math.random() * 100)));
         }
 
         // Populating the enemyFireShots stack with random fireballs
-        for (int i=0 ; i<5 ; i++) {
+        for (int i=0 ; i<100 ; i++) {
             enemyFireShots.push(new Fireball((int) (Math.random() * 70), true));
         }
     }
@@ -50,46 +50,23 @@ public class Arsenal {
         while (!dropletStack.isEmpty()) {
             dropletTree.add(dropletStack.pop());
         }
-        // dropletTree.traverse();
     }
     public static void BSTtoList () {
-        dropletTree.traverse(dropletTree.getRoot(), playerDroplets);
+        dropletTree.traverse(dropletTree.getRoot(), playerDropletsDLL);
     }
 
     // Getters
-    public static Stack<Droplet> getRainDrops() {
-        return rainDrops;
-    }
-    public static Stack<Droplet> getCollectedDroplets() {
-        return dropletStack;
-    }
-    public static Stack<Fireball> getEnemyFireShots() {
-        return enemyFireShots;
-    }
-    public static BinarySearchTree<Droplet> getDropletTree() {
-        return dropletTree;
-    }
-    public static DLL<Fireball> getPlayerDroplets() {
-        return playerDroplets;
-    }
-    public static int getEnemyScore() {
-        return enemyScore;
-    }
-    public static int getPlayerScore() {
-        return playerScore;
-    }
+    public static Stack<Droplet> getRainDrops() { return rainDrops; }
+    public static Stack<Droplet> getCollectedDroplets() { return dropletStack; }
+    public static Stack<Fireball> getEnemyFireShots() { return enemyFireShots; }
+    public static BinarySearchTree<Droplet> getDropletTree() { return dropletTree; }
+    public static DLL<Fireball> getPlayerDropletsDLL() { return playerDropletsDLL; }
+    public static int getEnemyScore() { return enemyScore; }
+    public static int getPlayerScore() { return playerScore; }
 
     // Setters
-    public static void enemyScoreIncrease() {
-        enemyScore++;
-    }
-    public static void playerScoreIncrease() {
-        playerScore++;
-    }
-    public static void enemyScoreIncrease(int score) {
-        enemyScore += score;
-    }
-    public static void playerScoreIncrease(int score) {
-        playerScore += score;
-    }
+    public static void enemyScoreIncrease() { enemyScore++; }
+    public static void playerScoreIncrease() { playerScore++; }
+    public static void enemyScoreIncrease(int score) { enemyScore += score; }
+    public static void playerScoreIncrease(int score) { playerScore += score; }
 }
