@@ -59,7 +59,7 @@ public class Fireball extends JLabel implements Comparable<Fireball> {
 
     // Action methods
     public void fall () {
-        if (y >= GameConstants.GAMEHEIGHT - CannonConstants.CANNON_HEIGHT - 5) {
+        if (y >= GameConstants.GAMEHEIGHT - CannonConstants.CANNON_HEIGHT - GameConstants.SOUTHPANEL_HEIGHT) {
             icon = burstIcon;
             hasBurst = true; // Mark as dropped
         }

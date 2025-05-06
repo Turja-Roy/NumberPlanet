@@ -1,10 +1,18 @@
+package actions.ds;
+
+import actions.ds.ll.DLL;
+import actions.ds.ll.Node;
+
 public class HashTable {
+
     public static int TABLE_SIZE = 100; 
-    public static LinkedList[] table = new LinkedList[TABLE_SIZE]; // array of linked lists 
+    @SuppressWarnings("unchecked")
+    public static DLL<Integer>[] table = (DLL<Integer>[]) new DLL[TABLE_SIZE];
     public static int size = 0; // number of elements in the hash table
+
     public HashTable() {
         for (int i = 0; i < TABLE_SIZE; i++) {
-            table[i] = new LinkedList(); // initialize each linked list in the array
+            table[i] = new DLL<>(); // initialize each linked list in the array
         }
     }
     public int hash(int key) {
@@ -18,7 +26,7 @@ public class HashTable {
     }
     public boolean search(int key) {
         int index = hash(key); // get the index for the key
-        LLNode node = table[index].find(key); // find the key in the linked list at that index
+        Node<Integer> node = table[index].find(key); // find the key in the linked list at that index
         return node != null; // return true if found, false otherwise
     }
     public void remove(int key) {

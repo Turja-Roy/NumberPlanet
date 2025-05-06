@@ -39,7 +39,6 @@ public class Droplet extends JLabel implements Comparable<Droplet> {
         // Set the icon for the splash
         splashIcon = new ImageIcon("res/splash.png");
         splashIcon = new ImageIcon(splashIcon.getImage().getScaledInstance(DROPLET_WIDTH, DROPLET_HEIGHT, Image.SCALE_SMOOTH)); // resize icon
-        icon = splashIcon;
 
         setBounds((int) x, (int) y, DROPLET_WIDTH, DROPLET_HEIGHT); // Set the bounds of the droplet
     }

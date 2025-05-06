@@ -7,6 +7,8 @@ public class Constants {
     public static class GameConstants {
         public static final int GAMEWIDTH = 1300;
         public static final int GAMEHEIGHT = 800;
+        public static final int WESTPANEL_WIDTH = 50;
+        public static final int SOUTHPANEL_HEIGHT = 100;
     }
 
     public static class DropletConstants {

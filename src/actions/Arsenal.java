@@ -66,6 +66,9 @@ public class Arsenal {
     public static Stack<Fireball> getEnemyFireShots() {
         return enemyFireShots;
     }
+    public static BinarySearchTree<Droplet> getDropletTree() {
+        return dropletTree;
+    }
     public static DLL<Fireball> getPlayerDroplets() {
         return playerDroplets;
     }

@@ -89,7 +89,7 @@ public class Round1Panel extends JPanel implements ActionListener {
             this.remove(transitionPanel);
             this.setLayout(null); // Restore original layout
             GamePanel parent = (GamePanel)getParent();
-            parent.switchToRound2Panel();
+            parent.switchToRound2();
         ((Timer)evt.getSource()).stop();
         });
         delayTimer.setRepeats(false);
@@ -122,7 +122,7 @@ public class Round1Panel extends JPanel implements ActionListener {
                 bucket.setShowGlow(true);
                 Arsenal.collectDroplet(droplet);
                 activeDroplets.remove(droplet);
-                ((GamePanel)getParent()).addCollectedDroplet(droplet.getValue());
+                ((GamePanel)getParent()).getWestPanel().addCollectedDroplet(droplet.getValue());
             }
             else if (droplet.hasSplashed()) {
                 splashedDroplet = droplet;

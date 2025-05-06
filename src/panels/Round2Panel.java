@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import main.GameFrame;
+import panels.GamePanel;
 import ui.Droplet;
 import ui.Fireball;
 import ui.Cannon;
@@ -77,12 +78,17 @@ public class Round2Panel extends JPanel implements ActionListener {
     public void actionPerformed (ActionEvent e) {
         updateEnemyFireballs();
         updatePlayerDroplets();
+
+        if (((GamePanel)getParent()).getSouthPanel() != null) {
+            ((GamePanel)getParent()).getSouthPanel().requestFocus();
+        }
+
         repaint();
     }
 
     // Action methods
     private void updateEnemyFireballs () {
-        if (!enemyFireShots.isEmpty() && lastShotHeight >= GameConstants.GAMEHEIGHT / 3) {
+        if (!enemyFireShots.isEmpty() && lastShotHeight >= GameConstants.GAMEHEIGHT / 4) {
             activeEnemyShots.add(enemyFireShots.pop());
             lastShotHeight = 0;
         }
@@ -113,6 +119,8 @@ public class Round2Panel extends JPanel implements ActionListener {
         }
 
         lastShotHeight += FireballConstants.FIREBALL_SPEED;
+        burstCounter++;
+        splashCounter++;
     }
     private void updatePlayerDroplets () {
         Iterator<Pair> it = activePlayerShots.iterator();
