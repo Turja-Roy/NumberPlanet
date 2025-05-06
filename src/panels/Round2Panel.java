@@ -1,5 +1,6 @@
 package panels;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -16,6 +17,7 @@ import actions.ds.ll.DLL;
 import actions.ds.stack.Stack;
 
 import javax.swing.ImageIcon;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
 import javax.swing.Timer;
@@ -24,6 +26,7 @@ import main.GameFrame;
 import panels.GamePanel;
 import ui.Droplet;
 import ui.Fireball;
+import ui.ScoreCard;
 import ui.Cannon;
 import utilz.Constants.CannonConstants;
 import utilz.Constants.FireballConstants;
@@ -34,20 +37,20 @@ public class Round2Panel extends JPanel implements ActionListener {
 
     private GameFrame gameFrame;
     private Timer timer;
+    private boolean gameEnded = false;
     
     private Stack<Fireball> enemyFireShots; // Enemy's arsenal
-    private ArrayList<Fireball> activeEnemyShots; // Active enemy shots
-
     private BinarySearchTree<Droplet> playerDropletsBST; // Player's arsenal
-    private ArrayList<Pair> activePlayerShots; // Active player shots
 
-    private int lastShotHeight;
-    private int burstCounter;
-    private int splashCounter;
+    private Fireball burstFireball, splashFireball;
+    private int burstCounter, splashCounter;
+
+    private Fireball enemyFireball, playerDroplet;
 
     private Image bgImage;
+    private ScoreCard enemyScore, playerScore;
 
-    private Cannon cannon;
+    private Cannon enemyCannon, playerCannon;
 
     public Round2Panel (GameFrame gameFrame) {
         this.gameFrame = gameFrame;
@@ -56,18 +59,26 @@ public class Round2Panel extends JPanel implements ActionListener {
 
         enemyFireShots = Arsenal.getEnemyFireShots();
 
-        activeEnemyShots = new ArrayList<>();
-        activePlayerShots = new ArrayList<>();
-
-        lastShotHeight = 0;
+        burstFireball = null;
+        splashFireball = null;
         burstCounter = 0;
         splashCounter = 0;
 
-        cannon = new Cannon();
+        enemyFireball = null;
+        playerDroplet = null;
+
+        enemyCannon = new Cannon(true);
+        playerCannon = new Cannon(false);
+
+        enemyScore = new ScoreCard(true);
+        playerScore = new ScoreCard(false);
 
         this.setPreferredSize(new Dimension(GameConstants.GAMEWIDTH, GameConstants.GAMEHEIGHT));
         this.setLayout(null);
         this.setVisible(true);
+
+        add(enemyScore);
+        add(playerScore);
 
         timer = new Timer(5, this);
         timer.start();
@@ -75,6 +86,8 @@ public class Round2Panel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed (ActionEvent e) {
+        if (gameEnded) gameOver();
+
         updateEnemyFireballs();
         updatePlayerDroplets();
 
@@ -87,122 +100,81 @@ public class Round2Panel extends JPanel implements ActionListener {
 
     // Updater methods
     private void updateEnemyFireballs () {
-        if (enemyFireShots.isEmpty()) {
+
+        if (enemyFireShots.isEmpty() && enemyFireball == null) {
+            // System.out.println("Here");
             gameOver();
+            return;
         }
 
-        if (!enemyFireShots.isEmpty() && lastShotHeight >= GameConstants.GAMEHEIGHT / 2) {
-            activeEnemyShots.add(enemyFireShots.pop());
-            lastShotHeight = 0;
+        if (!enemyFireShots.isEmpty() && enemyFireball == null) {
+            enemyFireball = enemyFireShots.pop();
+            return;
         }
+        if (enemyFireball == null) return;
 
-        Fireball burstFireball = null;
-        Fireball splashFireball = null;
-        try{
-        for (Fireball fireball : activeEnemyShots) {
-            if (fireball.hasSplashed()) {
-                splashFireball = fireball;
-                continue;
-            }
+        enemyFireball.fall();
 
-            fireball.fall();
-            if (fireball.hasBurst()) {
-                burstFireball = fireball;
-                Arsenal.enemyScoreIncrease(fireball.getValue());
-            }
-        }
-        } catch (ConcurrentModificationException e) { }
-
-        if (burstCounter > 200) {
-            activeEnemyShots.remove(burstFireball);
-            burstCounter = 0;
-        }
-        if (splashCounter > 200) {
-            activeEnemyShots.remove(splashFireball);
+        if (enemyFireball.hasSplashed()) {
+            splashFireball = enemyFireball;
             splashCounter = 0;
+            enemyFireball = null;
         }
-
-        lastShotHeight += FireballConstants.FIREBALL_SPEED;
-        burstCounter++;
-        splashCounter++;
+        if (enemyFireball.hasBurst()) {
+            burstFireball = enemyFireball;
+            burstCounter = 0;
+            Arsenal.enemyScoreIncrease(enemyFireball.getValue());
+            enemyFireball = null;
+        }
     }
     private void updatePlayerDroplets () {
-        Iterator<Pair> it = activePlayerShots.iterator();
-        while (it.hasNext()) {
-            Pair pair = it.next();
-            pair.getDroplet().shoot();
+        if (playerDroplet == null) return;
+        playerDroplet.shoot();
 
-            if (pair.getDroplet().intersect(pair.getTarget())) {
-                int ind = activeEnemyShots.indexOf(pair.getTarget());
-                if (pair.getDroplet().getValue() >= pair.getTarget().getValue()) {
-                    if (ind != -1) activeEnemyShots.get(ind).setSplash(true);
-
-                    Arsenal.playerScoreIncrease( pair.getDroplet().getValue() - pair.getTarget().getValue() );
-                    it.remove();
-                }
-                else {
-                    if (ind != -1) {
-                        activeEnemyShots.get(ind).setBurst(true);
-                        activeEnemyShots.get(ind).setValue( activeEnemyShots.get(ind).getValue() - pair.getDroplet().getValue() );
-                    }
-
-                    it.remove();
-                }
+        if (enemyFireball == null) {
+            Arsenal.playerScoreIncrease(playerDroplet.getValue());
+            playerDroplet = null;
+            return;
+        }
+        if (enemyFireball != null && playerDroplet.intersect(enemyFireball)) {
+            if (playerDroplet.getValue() >= enemyFireball.getValue()) {
+                splashFireball = playerDroplet.copy();
+                splashCounter = 0;
+                Arsenal.playerScoreIncrease(playerDroplet.getValue() - enemyFireball.getValue());
             }
+            else {
+                burstFireball = enemyFireball.copy();
+                burstCounter = 0;
+                Arsenal.enemyScoreIncrease(enemyFireball.getValue() - playerDroplet.getValue());
+            }
+            playerDroplet = null;
+            enemyFireball = null;
         }
     }
 
     // Action methods
     public void shootDroplet (int value) {
-        Fireball playerDroplet = new Fireball(value, false); // isFalling = false
-
-        // Find the target and position the cannon
-        Fireball target = findTargetFireball(value);
-        positionCannon(target);
-
-        playerDroplet.setXpos(cannon.getXpos() + (CannonConstants.CANNON_WIDTH - FireballConstants.FIREBALL_WIDTH)/2);
-        playerDroplet.setYpos(GameConstants.GAMEHEIGHT - CannonConstants.CANNON_HEIGHT);
-
-        activePlayerShots.add(new Pair(playerDroplet, target));
+        playerDroplet = new Fireball(value, false); // isFalling = false
     }
-    private void positionCannon(Fireball target) {
-        if (target == null) return;
 
-        cannon.setXpos(target.getXpos() - (CannonConstants.CANNON_WIDTH - FireballConstants.FIREBALL_WIDTH)/2);
-    }
-    private Fireball findTargetFireball(int buttonValue) {
-        Fireball largestSmaller = null;
-        Fireball closest = null;
-        int minDiff = Integer.MAX_VALUE;
-        
-        for (Fireball fb : activeEnemyShots) { // Using your existing activeShots list
-            int diff = Math.abs(fb.getValue() - buttonValue);
-            
-            if (fb.getValue() < buttonValue) {
-                if (largestSmaller == null || fb.getValue() > largestSmaller.getValue()) {
-                    largestSmaller = fb;
-                }
-            }
-            
-            if (diff < minDiff) {
-                minDiff = diff;
-                closest = fb;
-            }
+    private void gameOver() {
+        gameEnded = true;
+        timer.stop();
+
+        String gameOverText1 = "";
+        if (Arsenal.getEnemyScore() > Arsenal.getPlayerScore()) {
+            gameOverText1 += "You lose!";
+        } else if (Arsenal.getEnemyScore() < Arsenal.getPlayerScore()) {
+            gameOverText1 += "You win!";
+        } else {
+            gameOverText1 += "It's a tie!";
         }
-        
-        return largestSmaller != null ? largestSmaller : closest;
-    }
-    private void gameOver () {
-        // Create GameOver panel
-        String gameOverText = "Game Over! ";
-        // if (Arsenal.getEnemyScore() > Arsenal.getPlayerScore()) {
-        //     gameOverText += "You lose!";
-        // } else if (Arsenal.getEnemyScore() < Arsenal.getPlayerScore()) {
-        //     gameOverText += "You win!";
-        // } else {
-        //     gameOverText += "It's a tie!";
-        // }
-        TransitionPanel transitionPanel = new TransitionPanel(gameOverText);
+        String gameOverText2 = "Enemy Score: " + Arsenal.getEnemyScore() + "  -  " + "Player Score: " + Arsenal.getPlayerScore();
+
+        this.remove(enemyScore);
+        this.remove(playerScore);
+
+        TransitionPanel transitionPanel = new TransitionPanel(gameOverText1, gameOverText2);
         this.setLayout(new OverlayLayout(this)); // Change layout temporarily
         this.add(transitionPanel);
         transitionPanel.setAlignmentX(0.5f);
@@ -210,34 +182,29 @@ public class Round2Panel extends JPanel implements ActionListener {
         transitionPanel.revalidate();
         repaint();
 
-        // Delay timer
-        // Timer delayTimer = new Timer(5000, evt -> {
-        //     this.remove(transitionPanel);
-        //     this.setLayout(null); // Restore original layout
-        //     GamePanel parent = (GamePanel)getParent();
-        //     parent.switchToRound2();
-        // ((Timer)evt.getSource()).stop();
-        // });
-        // delayTimer.setRepeats(false);
-        // delayTimer.start();
+        Timer delayTimer = new Timer(10000, evt -> {
+            System.exit(0); // End the game
+        });
+        delayTimer.setRepeats(false);
+        delayTimer.start();
     }
 
     @Override
     public void paint (Graphics g) {
-        super.paint(g);
-
         g.drawImage(bgImage, 0, 0, GameConstants.GAMEWIDTH, GameConstants.GAMEHEIGHT, null);
 
-        // Draw the active enemy shots
-        for (Fireball fireball : activeEnemyShots) {
-            fireball.draw(g);
-        }
+        enemyCannon.draw(g);
+        playerCannon.draw(g);
 
-        // Draw the active player shots
-        for (Pair pair : activePlayerShots) {
-            pair.getDroplet().draw(g);
-        }
+        if (enemyFireball != null) enemyFireball.draw(g);
+        if (playerDroplet != null) playerDroplet.draw(g);
 
-        cannon.draw(g);
+        if (burstFireball != null && burstCounter <= 100) burstFireball.draw(g);
+        if (splashFireball != null && splashCounter <= 100) splashFireball.draw(g);
+
+        burstCounter++;
+        splashCounter++;
+
+        super.paintChildren(g);
     }
 }

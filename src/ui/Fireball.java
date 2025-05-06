@@ -23,21 +23,18 @@ public class Fireball extends JLabel implements Comparable<Fireball> {
 
     private boolean isFalling, isShooting, hasBurst, hasSplashed;
 
-    private int splashX, splashY;
-
     ImageIcon icon, fallIcon, shootIcon, burstIcon, splashIcon;
 
     public Fireball (int value, boolean isFalling) {
         this.isFalling = isFalling;
 
-        x = isFalling ? (double) Math.random() * (GameConstants.GAMEWIDTH - 50) : 0; // Random x position
-        y = isFalling ? 0f : GameConstants.GAMEHEIGHT - CannonConstants.CANNON_HEIGHT; // y position based on falling or shooting
+        x = GameConstants.GAMEWIDTH / 2 - FIREBALL_WIDTH / 2;
+        y = isFalling ? CannonConstants.CANNON_HEIGHT : GameConstants.GAMEHEIGHT - GameConstants.SOUTHPANEL_HEIGHT - CannonConstants.CANNON_HEIGHT;
+
         yvel = FIREBALL_SPEED;
         this.value = value;
         hasBurst = false;
         hasSplashed = false;
-        splashX = 0;
-        splashY = 0;
 
         // Set the icon for the fireball
         fallIcon = new ImageIcon("res/fireball.png");
@@ -76,12 +73,12 @@ public class Fireball extends JLabel implements Comparable<Fireball> {
         Graphics2D g2d = (Graphics2D) g.create();
 
         if (hasBurst) {
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-            g2d.drawImage(icon.getImage(), (int)x, (int)y, FIREBALL_WIDTH, FIREBALL_HEIGHT, null);
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+            g2d.drawImage(burstIcon.getImage(), (int)x, (int)y, FIREBALL_WIDTH, FIREBALL_HEIGHT, null);
         }
         else if (hasSplashed) {
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-            g2d.drawImage(splashIcon.getImage(), (int)splashX, (int)splashY, FIREBALL_WIDTH, FIREBALL_HEIGHT, null);
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+            g2d.drawImage(splashIcon.getImage(), (int)x, (int)y, FIREBALL_WIDTH, FIREBALL_HEIGHT, null);
         }
         else {
             // Set the composite for opacity
@@ -107,11 +104,6 @@ public class Fireball extends JLabel implements Comparable<Fireball> {
     }
 
     // Action methods
-    public void splash (int x, int y) {
-        splashX = x;
-        splashY = y;
-        hasSplashed = true; // Mark as splashed
-    }
     public boolean intersect (Fireball other) {
         return this.getBounds().intersects(other.getBounds());
     }
@@ -137,6 +129,15 @@ public class Fireball extends JLabel implements Comparable<Fireball> {
     public void setValue (int value) { this.value = value; }
     public void setBurst (boolean hasBurst) { this.hasBurst = hasBurst; }
     public void setSplash (boolean hasSplashed) { this.hasSplashed = hasSplashed; }
+
+    public Fireball copy () {
+        Fireball copy = this;
+
+        if (isFalling) copy.setBurst(true);
+        else copy.setSplash(true);
+
+        return copy;
+    }
 
     @Override
     public int compareTo (Fireball other) {

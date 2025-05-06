@@ -29,7 +29,7 @@ public class Constants {
     }
 
     public static class CannonConstants {
-        public static final int CANNON_WIDTH = 30;
-        public static final int CANNON_HEIGHT = 40;
+        public static final int CANNON_WIDTH = 50;
+        public static final int CANNON_HEIGHT = 60;
     }
 }

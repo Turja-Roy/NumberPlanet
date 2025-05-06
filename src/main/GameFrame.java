@@ -75,4 +75,10 @@ public class GameFrame extends JFrame {
     //     this.revalidate();
     //     this.repaint();
     // }
+    public void returnToMainMenu() {
+        getContentPane().removeAll();
+        add(new IntroPanel(this));
+        revalidate();
+        repaint();
+    }
 }

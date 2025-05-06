@@ -30,12 +30,12 @@ public class Arsenal {
         playerScore = 0;
 
         // Populating the rainDrops stack with random droplets
-        for (int i=0 ; i<10 ; i++) {
+        for (int i=0 ; i<5 ; i++) {
             rainDrops.push(new Droplet((int) (Math.random() * 100)));
         }
 
         // Populating the enemyFireShots stack with random fireballs
-        for (int i=0 ; i<10 ; i++) {
+        for (int i=0 ; i<5 ; i++) {
             enemyFireShots.push(new Fireball((int) (Math.random() * 70), true));
         }
     }
@@ -72,10 +72,10 @@ public class Arsenal {
     public static DLL<Fireball> getPlayerDroplets() {
         return playerDroplets;
     }
-    public int getEnemyScore() {
+    public static int getEnemyScore() {
         return enemyScore;
     }
-    public int getPlayerScore() {
+    public static int getPlayerScore() {
         return playerScore;
     }
 

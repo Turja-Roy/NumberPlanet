@@ -16,19 +16,24 @@ import static utilz.Constants.CannonConstants.*;
 public class Cannon extends JLabel {
     private double x, y;
 
-    private ImageIcon icon;
+    private ImageIcon icon, enemyCannonIcon, playerCannonIcon;
 
-    private int glowCounter;
-    private boolean showGlow = false;
+    private boolean isEnemyCannon;
 
-    public Cannon () {
-        x = 0;
-        y = GameConstants.GAMEHEIGHT - CANNON_HEIGHT;
-        glowCounter = 0;
+    public Cannon (boolean isEnemyCannon) {
+        this.isEnemyCannon = isEnemyCannon;
 
-        // Set the icon for the bucket
-        icon = new ImageIcon("res/cannon1.png");
-        icon = new ImageIcon(icon.getImage().getScaledInstance(CANNON_WIDTH, CANNON_HEIGHT, java.awt.Image.SCALE_SMOOTH)); // resize icon
+        x = GameConstants.GAMEWIDTH / 2 - CANNON_WIDTH / 2;
+        y = isEnemyCannon ? 0 : GameConstants.GAMEHEIGHT - GameConstants.SOUTHPANEL_HEIGHT - CANNON_HEIGHT;
+
+        // Set the cannon icons
+        enemyCannonIcon = new ImageIcon("res/enemyCannon.png");
+        enemyCannonIcon = new ImageIcon(enemyCannonIcon.getImage().getScaledInstance(CANNON_WIDTH, CANNON_HEIGHT, java.awt.Image.SCALE_SMOOTH)); // resize icon
+
+        playerCannonIcon = new ImageIcon("res/playerCannon.png");
+        playerCannonIcon = new ImageIcon(playerCannonIcon.getImage().getScaledInstance(CANNON_WIDTH, CANNON_HEIGHT, java.awt.Image.SCALE_SMOOTH)); // resize icon
+
+        icon = isEnemyCannon ? enemyCannonIcon : playerCannonIcon;
 
         setBounds((int) x, (int) y, CANNON_WIDTH, CANNON_HEIGHT); // Set the bounds of the bucket
     }
