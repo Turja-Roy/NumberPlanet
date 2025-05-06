@@ -33,13 +33,9 @@ public class Cannon extends JLabel {
         setBounds((int) x, (int) y, CANNON_WIDTH, CANNON_HEIGHT); // Set the bounds of the bucket
     }
 
-    // Action methods
-    public void moveBucket (int mouseX) {
-        // x = mouseX - getWidth()/2; // Center the bucket under the mouse
-        // if (x < 0) x = 0; // Prevent moving out of bounds
-        // if (x > GameConstants.GAMEWIDTH - getWidth()) x = GameConstants.GAMEWIDTH - getWidth(); // Prevent moving out of bounds
-        //
-        // setBounds((int) x, (int) y, getWidth(), getHeight()); // Update the bounds of the bucket
+    public void setXpos (double x) {
+        this.x = x;
+        setBounds((int) x, (int) y, CANNON_WIDTH, CANNON_HEIGHT); // Update the bounds of the cannon
     }
 
     // Drawing method

@@ -4,6 +4,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import utilz.Constants.BucketConstants;
+import utilz.Constants.GameConstants;
 
 import static utilz.Constants.GameConstants;
 import static utilz.Constants.DropletConstants.*;
@@ -26,7 +27,7 @@ public class Droplet extends JLabel implements Comparable<Droplet> {
     ImageIcon icon, splashIcon;
 
     public Droplet (int value) {
-        x = (double) Math.random() * (GameConstants.GAMEWIDTH - 50); // Random x position
+        x = (double) Math.random() * (GameConstants.GAMEWIDTH - 2 * GameConstants.WESTPANEL_WIDTH); // Random x position
         y = 0f;
         yvel = DROPLET_SPEED;
         this.value = value;

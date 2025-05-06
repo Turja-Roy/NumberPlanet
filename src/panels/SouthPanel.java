@@ -99,9 +99,11 @@ public class SouthPanel extends JPanel implements KeyListener {
             if (found != null) {
                 if (found.getCount() > 1) {
                     found.getData().setActive();
+                    ((GamePanel)getParent()).getRound2Panel().shootDroplet(found.getData().getValue());
                     labelTree.remove(found.getData());
                 } else if (found.getCount() == 1) {
                     found.getData().setInactive();
+                    ((GamePanel)getParent()).getRound2Panel().shootDroplet(found.getData().getValue());
                     found.setCount(0);
                 } else {
                     inputFeedback.setForeground(Color.RED);

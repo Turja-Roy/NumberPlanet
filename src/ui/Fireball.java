@@ -132,6 +132,8 @@ public class Fireball extends JLabel implements Comparable<Fireball> {
     }
 
     // Setters
+    public void setXpos (double x) { this.x = x; }
+    public void setYpos (double y) { this.y = y; }
     public void setValue (int value) { this.value = value; }
     public void setBurst (boolean hasBurst) { this.hasBurst = hasBurst; }
     public void setSplash (boolean hasSplashed) { this.hasSplashed = hasSplashed; }
