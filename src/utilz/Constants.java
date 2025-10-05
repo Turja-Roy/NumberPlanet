@@ -5,13 +5,13 @@ import main.ImplementedDS;
 
 public class Constants {
 
-    // public static final ImplementedDS IMPLEMENTED_DS = ImplementedDS.BINARYSEARCHTREE;
-    public static final ImplementedDS IMPLEMENTED_DS = ImplementedDS.HASHTABLE;
+    public static final ImplementedDS IMPLEMENTED_DS = ImplementedDS.BINARYSEARCHTREE;
+    // public static final ImplementedDS IMPLEMENTED_DS = ImplementedDS.HASHTABLE;
 
     public static class GameConstants {
         public static final int GAMEWIDTH = 1300;
         public static final int GAMEHEIGHT = 800;
-        public static final int SHOTS_PER_ROUND = 5;
+        public static final int SHOTS_PER_ROUND = 10;
         public static final int WESTPANEL_WIDTH = 50;
         public static final int WESTPANEL_STACK_LENGTH = 11;
         public static final int SOUTHPANEL_HEIGHT = 100;
